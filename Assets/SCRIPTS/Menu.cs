@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
-    public GameObject[] menuItems;
+    public GameObject[  ] menuItems;
     private int currentItemIndex = 0;
 
     void Start()
     {
         SetActiveMenuItem(currentItemIndex);
     }
-
+        
     void SetActiveMenuItem(int index)
     {
         foreach (GameObject menuItem in menuItems)
