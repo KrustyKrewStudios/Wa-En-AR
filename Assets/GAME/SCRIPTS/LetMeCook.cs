@@ -42,19 +42,26 @@ public class LetMeCook : MonoBehaviour
             float multiplier = GetGrillMultiplier(currentGrillState);
             float timeToNextState = baseCookingTime / multiplier;
 
-            cookingProgress += Time.deltaTime;
+            // Update the cooking progress based on the normalized delta time
+            cookingProgress += Time.deltaTime / timeToNextState;
 
-            Debug.Log("Grill State: " + currentGrillState + ", Cooking Progress: " + cookingProgress + "/" + timeToNextState);
+            // Ensure cooking progress doesn't exceed 1
+            cookingProgress = Mathf.Clamp01(cookingProgress);
 
-            if (cookingProgress >= timeToNextState)
+            Debug.Log("Grill State: " + currentGrillState + ", Cooking Progress: " + cookingProgress);
+
+            // Check if we've reached or exceeded the required progress for the next state
+            if (cookingProgress >= 1f)
             {
                 AdvanceCookingState();
                 cookingProgress = 0f; // Reset progress for the next state
             }
 
-            UpdateProgressBar(cookingProgress, timeToNextState);
+            // Update the progress bar
+            UpdateProgressBar(cookingProgress, 1f); // Using 1f as max progress since it's normalized
         }
     }
+
 
     private float GetGrillMultiplier(Grill.GrillState grillState)
     {
