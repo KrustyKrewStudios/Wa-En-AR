@@ -3,13 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
 public class Grill : MonoBehaviour
 {
     public enum GrillState { Off, Low, Medium, High }
     private GrillState currentState = GrillState.Off;
     public bool isTurnedOn = false;
-    public event Action OnGrillStateChanged; 
+    public event Action OnGrillStateChanged;
+
+    public Material[] stateMaterials; // Ensure this array has 4 materials for Off, Low, Medium, High
+    private Renderer grillRenderer;
+
+    private void Start()
+    {
+        grillRenderer = GetComponent<Renderer>();
+        if (grillRenderer == null)
+        {
+            Debug.LogError("Renderer component not found on the Grill GameObject.");
+            return;
+        }
+        UpdateGrillState(); // Initialize the grill material based on the default state
+    }
 
     public void IncreaseGrillState()
     {
@@ -44,13 +57,23 @@ public class Grill : MonoBehaviour
             isTurnedOn = true;
         }
         Debug.Log("Grill Turned On: " + isTurnedOn);
+
+        // Update the grill material based on the current state
+        if (stateMaterials != null && stateMaterials.Length == Enum.GetNames(typeof(GrillState)).Length)
+        {
+            grillRenderer.material = stateMaterials[(int)currentState];
+        }
+        else
+        {
+            Debug.LogError("State materials array is not properly set up.");
+        }
+
+        // Invoke the OnGrillStateChanged event if there are any subscribers
+        OnGrillStateChanged?.Invoke();
     }
-        
 
     public GrillState GetCurrentGrillState()
     {
         return currentState;
     }
-
-
 }
