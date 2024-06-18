@@ -1,3 +1,4 @@
+using Imagine.WebAR;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,9 @@ public class LetMeCook : MonoBehaviour
     public int maximumProgress;
     public int currentProgress;
     public Image progressBar;
+
+    public Transform progressBarTransform; // Transform of the progress bar UI
+    public ARCamera ARCamera;
 
     private void Start()
     {
@@ -60,6 +64,8 @@ public class LetMeCook : MonoBehaviour
             // Update the progress bar
             UpdateProgressBar(cookingProgress, 1f); // Using 1f as max progress since it's normalized
         }
+
+        FaceCamera();
     }
 
 
@@ -151,4 +157,30 @@ public class LetMeCook : MonoBehaviour
         float fillAmount = progress / maxProgress;
         progressBar.fillAmount = fillAmount;
     }
+
+    private void FaceCamera()
+    {
+        // Make the progress bar face the camera
+        if (progressBarTransform != null && ARCamera != null)
+        {
+            progressBarTransform.LookAt(progressBarTransform.position + ARCamera.transform.rotation * Vector3.forward,
+                                        ARCamera.transform.rotation * Vector3.up);
+        }
+        else
+        {
+            // Log if either progressBarTransform or ARCamera is null
+            if (progressBarTransform == null)
+            {
+                Debug.LogWarning("progressBarTransform is null");
+            }
+
+            if (ARCamera == null)
+            {
+                Debug.LogWarning("ARCamera is null");
+            }
+        }
+
+    }
+
+
 }

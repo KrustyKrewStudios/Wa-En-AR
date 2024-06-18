@@ -6177,6 +6177,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9036112425031956280, guid: d4ca1f7d54077514987e6d9df4de0831,
         type: 3}
+      propertyPath: ARCamera
+      value: 
+      objectReference: {fileID: 963194230}
+    - target: {fileID: 9036112425031956280, guid: d4ca1f7d54077514987e6d9df4de0831,
+        type: 3}
       propertyPath: spawnPoint
       value: 
       objectReference: {fileID: 2062558153}
@@ -8095,6 +8100,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: beefParent
       objectReference: {fileID: 0}
+    - target: {fileID: 4939409214088749646, guid: 6633423ade76d5d47a86f524510bb6cc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8469,6 +8479,8 @@ MonoBehaviour:
   maximumProgress: 100
   currentProgress: 0
   progressBar: {fileID: 6641112205133790125}
+  progressBarTransform: {fileID: 0}
+  ARCamera: {fileID: 0}
 --- !u!114 &6641112205133790125
 MonoBehaviour:
   m_ObjectHideFlags: 0

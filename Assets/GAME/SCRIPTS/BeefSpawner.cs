@@ -10,6 +10,7 @@ public class BeefSpawner : MonoBehaviour
 
     public Transform arCameraTransform; // Public variable for AR camera transform
 
+    public ARCamera ARCamera;
 
     private bool isBeefSpawned = false; // Flag to track if a beef is currently spawned
 
@@ -59,6 +60,34 @@ public class BeefSpawner : MonoBehaviour
             // Assign the AR camera's transform to the cam variable in TwoFingerPan
             panScript.cam = arCameraTransform;
         }
+
+        // Get the LetMeCook component from the child of the instantiated beef prefab
+        LetMeCook beefScript = newBeef.GetComponentInChildren<LetMeCook>();
+
+        if (beefScript != null)
+        {
+            // Log that the beefScript component was successfully obtained
+            Debug.Log("Successfully obtained LetMeCook component from newBeef.");
+
+            // Assign the ARCamera to the beefScript
+            beefScript.ARCamera = ARCamera;
+
+            // Log the ARCamera assignment
+            if (ARCamera != null)
+            {
+                Debug.Log($"ARCamera successfully assigned to beefScript: {ARCamera.name}");
+            }
+            else
+            {
+                Debug.LogWarning("ARCamera is null, cannot assign to beefScript.");
+            }
+        }
+        else
+        {
+            // Log a warning if the LetMeCook component could not be found
+            Debug.LogWarning("Could not find LetMeCook component on newBeef.");
+        }
+
 
         Debug.Log("Beef spawned at: " + spawnPoint.position);
     }
