@@ -7,7 +7,7 @@ namespace Imagine.WebAR
     public class TwoFingerPan : MonoBehaviour
     {
         [SerializeField] Transform panTransform;
-        [SerializeField] Transform cam;
+        public Transform cam;
         Vector3 origPos, startPos;
         Vector2 touch0StartPos, touch1StartPos;
 
