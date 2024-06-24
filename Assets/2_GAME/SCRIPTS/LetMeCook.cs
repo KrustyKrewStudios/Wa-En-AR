@@ -22,6 +22,7 @@ public class LetMeCook : MonoBehaviour
     public int maximumProgress;
     public int currentProgress;
     public Image progressBar;
+    public GameObject progressBarUI;
 
     public Transform progressBarTransform; // Transform of the progress bar UI
     public ARCamera ARCamera;
@@ -35,12 +36,13 @@ public class LetMeCook : MonoBehaviour
         }
         UpdateMaterial(); // Ensure the initial material is set
         Debug.Log("Initial Beef State: " + currentState);
+        progressBarUI.SetActive(false);
     }
 
 
     private void Update()
     {
-        if (isCooking && isOnGrill && grill != null && grill.isTurnedOn)
+        if (isCooking && isOnGrill && grill != null && grill.isTurnedOn && currentState != BeefState.Burnt)
         {
             Grill.GrillState currentGrillState = grill.GetCurrentGrillState();
             float multiplier = GetGrillMultiplier(currentGrillState);
@@ -68,7 +70,6 @@ public class LetMeCook : MonoBehaviour
         FaceCamera();
     }
 
-
     private float GetGrillMultiplier(Grill.GrillState grillState)
     {
         switch (grillState)
@@ -91,16 +92,22 @@ public class LetMeCook : MonoBehaviour
             currentState++;
             UpdateMaterial();
             Debug.Log("Beef State Changed: " + currentState);
-        }
-        else
-        {
-            isCooking = false; // Stop cooking when burnt
-            Debug.Log("Beef is burnt. Cooking stopped.");
+
+            // Check if the new state is burnt
+            if (currentState == BeefState.Burnt)
+            {
+                isCooking = false; // Stop cooking when burnt
+                progressBarUI.SetActive(false); // Hide the progress bar
+                Debug.Log("Beef is burnt. Cooking stopped and progress bar hidden.");
+            }
         }
 
-        // Reset progress bar when state changes
-        currentProgress = 0;
-        progressBar.fillAmount = 0;
+        // Reset progress bar when state changes, but hide if burnt
+        if (currentState != BeefState.Burnt)
+        {
+            currentProgress = 0;
+            progressBar.fillAmount = 0;
+        }
     }
 
     private void UpdateMaterial()
@@ -114,9 +121,18 @@ public class LetMeCook : MonoBehaviour
         {
             if (grill.isTurnedOn)
             {
-                StartCooking();
+                if (!isCooking) // Ensure StartCooking is only called if not already cooking
+                {
+                    StartCooking();
+                }
             }
-            // No need to handle the case when grill turns off, as StopCooking() is already called in OnTriggerExit.
+            else
+            {
+                if (isCooking) // Ensure StopCooking is only called if currently cooking
+                {
+                    StopCooking();
+                }
+            }
         }
     }
 
@@ -125,8 +141,11 @@ public class LetMeCook : MonoBehaviour
         if (other.CompareTag("Grill"))
         {
             isOnGrill = true;
-            StartCooking(); // Always start cooking when beef is on the grill
             Debug.Log("Beef is on the grill.");
+            if (grill != null && grill.isTurnedOn)
+            {
+                StartCooking();
+            }
         }
     }
 
@@ -144,6 +163,8 @@ public class LetMeCook : MonoBehaviour
     {
         isCooking = true;
         Debug.Log("Cooking Started");
+        progressBarUI.SetActive(true);
+
     }
 
     public void StopCooking()

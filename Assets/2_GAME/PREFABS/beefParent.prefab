@@ -308,6 +308,7 @@ MonoBehaviour:
   maximumProgress: 100
   currentProgress: 0
   progressBar: {fileID: 7732421414742969659}
+  progressBarUI: {fileID: 385609130302314412}
   progressBarTransform: {fileID: 589171103798127016}
   ARCamera: {fileID: 0}
 --- !u!54 &3830790820599638004
