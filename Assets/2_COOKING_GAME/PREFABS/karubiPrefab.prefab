@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1898306123224118216}
   m_Layer: 0
   m_Name: karubiPrefab
-  m_TagString: Beef
+  m_TagString: Karubi
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

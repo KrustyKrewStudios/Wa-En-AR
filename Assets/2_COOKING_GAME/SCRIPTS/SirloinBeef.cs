@@ -1,5 +1,3 @@
-    using UnityEngine;
-
 using UnityEngine;
 
 public class SirloinBeef : BeefBase

@@ -10,17 +10,22 @@ public class OrderManager : MonoBehaviour
     private GameObject selectedBeef; // Store the selected beef
 
     private BeefType currentOrderType = BeefType.Karubi; // Default to Karubi for the first order
-    private BeefState currentOrderState = BeefState.Medium; // Default to Medium for Karubi
+    private BeefBase.BeefState currentOrderState = BeefBase.BeefState.Medium; // Default to Medium for Karubi
 
     public void StartMinigame()
     {
         // Set the current order state for Medium (can be adjusted based on your game logic)
         currentOrderType = BeefType.Karubi;
-        currentOrderState = BeefState.Medium;
+        currentOrderState = BeefBase.BeefState.Medium;
         Debug.Log("Current Order: Medium");
 
         // Update UI text to display the current order
         orderText.text = "Current Order: Medium Karubi";
+    }
+
+    private void Start()
+    {
+        StartMinigame();
     }
 
     public void SelectBeef(GameObject beefObject)
@@ -96,19 +101,18 @@ public class OrderManager : MonoBehaviour
 }
 
 public enum BeefType
-    {
-        Karubi,
-        Sirloin,
-        // Add more beef types as needed
-    }
-
-    public enum BeefState
-    {
-        Raw,
-        Rare,
-        Medium,
-        WellDone,
-        Burnt
-    }
-
+{
+    Karubi,
+    Sirloin,
+    // Add more beef types as needed
 }
+
+public enum BeefState
+{
+    Raw,
+    Rare,
+    Medium,
+    WellDone,
+    Burnt
+}
+    
