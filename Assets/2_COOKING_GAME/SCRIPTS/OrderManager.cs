@@ -12,21 +12,74 @@ public class OrderManager : MonoBehaviour
     private BeefType currentOrderType = BeefType.Karubi; // Default to Karubi for the first order
     private BeefBase.BeefState currentOrderState = BeefBase.BeefState.Medium; // Default to Medium for Karubi
 
-    public void StartMinigame()
-    {
-        // Set the current order state for Medium (can be adjusted based on your game logic)
-        currentOrderType = BeefType.Karubi;
-        currentOrderState = BeefBase.BeefState.Medium;
-        Debug.Log("Current Order: Medium");
+    private int currentOrderIndex = 0; // Index to keep track of the current order
 
-        // Update UI text to display the current order
-        orderText.text = "Current Order: Medium Karubi";
-    }
 
     private void Start()
     {
         StartMinigame();
     }
+
+    public void StartMinigame()
+    {
+        SetOrder1(); // Start with the first order
+    }
+
+    // Function to set order 1 (medium Karubi)
+    public void SetOrder1()
+    {
+        currentOrderType = BeefType.Karubi;
+        currentOrderState = BeefBase.BeefState.Medium;
+        UpdateOrderText("Medium Karubi");
+        Debug.Log("order 1 medium karubi");
+    }
+
+    // Function to set order 2 (well-done Sirloin)
+    public void SetOrder2()
+    {
+        currentOrderType = BeefType.Sirloin;
+        currentOrderState = BeefBase.BeefState.WellDone;
+        UpdateOrderText("Well-done Sirloin");
+        Debug.Log("order 2 well sirloin ");
+
+    }
+
+    // Function to set order 3 (rare Karubi)
+    public void SetOrder3()
+    {
+        currentOrderType = BeefType.Karubi;
+        currentOrderState = BeefBase.BeefState.Rare;
+        UpdateOrderText("Rare Karubi");
+        Debug.Log("order 3 rare karubi");
+
+    }
+
+    // Function to update the order text
+    private void UpdateOrderText(string orderDescription)
+    {
+        orderText.text = "Current Order: " + orderDescription;
+        Debug.Log("Current Order: " + orderDescription);
+    }
+
+    // Function to set the next order based on the current order index
+    private void SetNextOrder()
+    {
+        currentOrderIndex = (currentOrderIndex + 1) % 3; // Cycle through 0, 1, 2
+
+        switch (currentOrderIndex)
+        {
+            case 0:
+                SetOrder1();
+                break;
+            case 1:
+                SetOrder2();
+                break;
+            case 2:
+                SetOrder3();
+                break;
+        }
+    }
+
 
     public void SelectBeef(GameObject beefObject)
     {
@@ -71,6 +124,8 @@ public class OrderManager : MonoBehaviour
                         Debug.Log("Order checked: Correct!");
                         orderText.text = "Order Checked: Correct!";
                         // Handle correct order checked logic here
+                        SetNextOrder(); // Set the next order
+
                     }
                     else
                     {
@@ -100,7 +155,7 @@ public class OrderManager : MonoBehaviour
     }
 }
 
-public enum BeefType
+    public enum BeefType
 {
     Karubi,
     Sirloin,

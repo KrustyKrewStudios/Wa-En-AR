@@ -22,7 +22,6 @@ public abstract class BeefBase : MonoBehaviour
     public GameObject progressBarUI;
     public Image progressBar;
     public Transform progressBarTransform;
-    public ARCamera ARCamera;
 
     protected virtual void Start()
     {
@@ -63,7 +62,6 @@ public abstract class BeefBase : MonoBehaviour
             UpdateProgressBar(cookingProgress, 1f);
         }
 
-        FaceCamera();
     }
 
     protected virtual float GetGrillMultiplier(Grill.GrillState grillState)
@@ -171,22 +169,6 @@ public abstract class BeefBase : MonoBehaviour
         progressBar.fillAmount = fillAmount;
     }
 
-    protected virtual void FaceCamera()
-    {
-        if (progressBarTransform != null && ARCamera != null)
-        {
-            progressBarTransform.LookAt(progressBarTransform.position + ARCamera.transform.rotation * Vector3.forward,
-                                        ARCamera.transform.rotation * Vector3.up);
-        }
-        else
-        {
-
-            if (ARCamera == null)
-            {
-                Debug.LogWarning("ARCamera is null");
-            }
-        }
-    }
 
     public abstract BeefState GetCurrentState();
 

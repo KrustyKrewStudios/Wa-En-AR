@@ -65,17 +65,8 @@ public class BeefSpawner : MonoBehaviour
             Debug.Log("Successfully obtained LetMeCook component from newKarubi.");
 
             // Assign the ARCamera to the karubiScript
-            karubiScript.ARCamera = ARCamera;
 
-            // Log the ARCamera assignment
-            if (ARCamera != null)
-            {
-                Debug.Log($"ARCamera successfully assigned to karubiScript: {ARCamera.name}");
-            }
-            else
-            {
-                Debug.LogWarning("ARCamera is null, cannot assign to karubiScript.");
-            }
+
         }
         else
         {
@@ -121,18 +112,7 @@ public class BeefSpawner : MonoBehaviour
             // Log that the sirloinScript component was successfully obtained
             Debug.Log("Successfully obtained LetMeCook component from newSirloin.");
 
-            // Assign the ARCamera to the sirloinScript
-            sirloinScript.ARCamera = ARCamera;
 
-            // Log the ARCamera assignment
-            if (ARCamera != null)
-            {
-                Debug.Log($"ARCamera successfully assigned to sirloinScript: {ARCamera.name}");
-            }
-            else
-            {
-                Debug.LogWarning("ARCamera is null, cannot assign to sirloinScript.");
-            }
         }
         else
         {
@@ -152,4 +132,25 @@ public class BeefSpawner : MonoBehaviour
             Gizmos.DrawWireCube(spawnCollider.bounds.center, spawnCollider.bounds.size);
         }
     }
+
+    // Method to clear all spawned beef from the scene
+    public void ClearBeef()
+    {
+        GameObject[] karubiObjects = GameObject.FindGameObjectsWithTag("Karubi");
+        foreach (GameObject karubi in karubiObjects)
+        {
+            Destroy(karubi);
+        }
+
+        GameObject[] sirloinObjects = GameObject.FindGameObjectsWithTag("Sirloin");
+        foreach (GameObject sirloin in sirloinObjects)
+        {
+            Destroy(sirloin);
+        }
+
+        Debug.Log("All spawned beef (Karubi and Sirloin) has been cleared from the scene.");
+    }
+
+
+
 }
