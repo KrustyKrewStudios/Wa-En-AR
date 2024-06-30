@@ -172,8 +172,8 @@ public abstract class BeefBase : MonoBehaviour
 
     public abstract BeefState GetCurrentState();
 
-    protected virtual void OnMouseDown()
-    {
-        orderManager.SelectBeef(gameObject);
-    }
+    //protected virtual void OnMouseDown()
+    //{
+       // orderManager.SelectBeef(gameObject);
+    //}
 }
