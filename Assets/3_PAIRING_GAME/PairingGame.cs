@@ -63,15 +63,15 @@ public class PairingGame : MonoBehaviour
 
     private int GetResultFromAngle(float angle)
     {
-        if (angle >= 22f && angle < 92f)
+        if (angle >= 22f && angle < -50f)
             return 3;
-        else if (angle >= 92f && angle < 164f)
+        else if (angle >= -50f && angle < -122f)
             return 2;
-        else if (angle >= 164f && angle < 236f)
+        else if (angle >= -122f && angle < -194f)
             return 1;
-        else if (angle >= 236f && angle < 308f)
+        else if (angle >= -194f && angle < -264f)
             return 5;
-        else if (angle >= 308f && angle < 22f)
+        else if (angle >= -264f && angle < 22f)
             return 4;
         else
             return 4; 
