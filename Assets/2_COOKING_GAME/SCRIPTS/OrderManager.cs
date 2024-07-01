@@ -15,6 +15,9 @@ public class OrderManager : MonoBehaviour
     private int currentOrderIndex = 0; // Index to keep track of the current order
 
 
+    public ServingPlate servingPlate; // Reference to the ServingPlate script
+
+
     private void Start()
     {
         StartMinigame();
@@ -81,57 +84,55 @@ public class OrderManager : MonoBehaviour
     }
 
 
+
     public void SelectBeef(GameObject beefObject)
     {
-        selectedBeef = beefObject;
-        Debug.Log("Beef selected: " + selectedBeef.name);
+        // Move the beef to the serving plate
+        beefObject.transform.position = servingPlateTransform.position;
+        Debug.Log("Beef placed on plate: " + beefObject.name);
+    }
 
-        // Example: Teleport the selected beef to the serving plate
-        if (selectedBeef != null)
+    // Function to check the order when the serve button is clicked
+    public void ServeBeef()
+    {
+        GameObject beefOnPlate = servingPlate.GetBeefOnPlate();
+
+        if (beefOnPlate != null)
         {
-            selectedBeef.transform.position = servingPlateTransform.position;
-            Debug.Log("Beef teleported to plate: " + selectedBeef.name);
-
-            // Check if the beef matches the current order
-            CheckOrder();
+            CheckOrder(beefOnPlate);
         }
         else
         {
-            Debug.Log("No beef selected.");
+            Debug.Log("No beef on the plate to check.");
+            orderText.text = "No beef on the plate to check.";
         }
     }
 
-    private void CheckOrder()
+    private void CheckOrder(GameObject beefOnPlate)
     {
-        if (selectedBeef != null)
+        if (beefOnPlate != null)
         {
-            // Check if the selected beef has a tag
-            string beefTag = selectedBeef.tag;
+            // Check if the beef matches the current order type
+            string beefTag = beefOnPlate.tag;
 
-            // Compare the tag with the current order type
             if ((beefTag == "Karubi" && currentOrderType == BeefType.Karubi) ||
                 (beefTag == "Sirloin" && currentOrderType == BeefType.Sirloin))
             {
-                // Check if the selected beef component exists
-                BeefBase beefComponent = selectedBeef.GetComponent<BeefBase>();
+                BeefBase beefComponent = beefOnPlate.GetComponent<BeefBase>();
                 if (beefComponent != null)
                 {
                     BeefBase.BeefState selectedState = beefComponent.GetCurrentState();
 
-                    // Compare with the current order state
                     if (selectedState == currentOrderState)
                     {
                         Debug.Log("Order checked: Correct!");
                         orderText.text = "Order Checked: Correct!";
-                        // Handle correct order checked logic here
                         SetNextOrder(); // Set the next order
-
                     }
                     else
                     {
                         Debug.Log("Order checked: Incorrect temperature!");
                         orderText.text = "Order Checked: Incorrect temperature!";
-                        // Handle incorrect temperature logic here
                     }
                 }
                 else
@@ -144,7 +145,6 @@ public class OrderManager : MonoBehaviour
             {
                 Debug.Log("Order checked: Incorrect type!");
                 orderText.text = "Order Checked: Incorrect type!";
-                // Handle incorrect type logic here
             }
         }
         else

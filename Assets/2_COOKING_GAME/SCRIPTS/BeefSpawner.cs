@@ -1,14 +1,10 @@
-using Imagine.WebAR;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BeefSpawner : MonoBehaviour
 {
-    public GameObject karubiPrefab; 
-    public GameObject sirloinPrefab; 
-
-
+    public GameObject karubiPrefab;
+    public GameObject sirloinPrefab;
 
     public Transform[] grillSpots; // Assign multiple grill spots in the inspector
     public Transform[] servingPlateSpots; // Assign multiple serving plate spots in the inspector
@@ -19,10 +15,8 @@ public class BeefSpawner : MonoBehaviour
 
     private GameObject selectedBeef; // Currently selected beef
 
-
     void Start()
     {
-
         if (grillSpots == null || grillSpots.Length == 0)
         {
             Debug.LogError("No grill spots assigned!");
@@ -32,7 +26,6 @@ public class BeefSpawner : MonoBehaviour
         {
             Debug.LogError("No serving plate spots assigned!");
         }
-
     }
 
     public void SpawnKarubi()
@@ -101,7 +94,12 @@ public class BeefSpawner : MonoBehaviour
         }
 
         Debug.Log("All spawned beef (Karubi and Sirloin) has been cleared from the scene.");
+
+        // Reset the indices after clearing the beef
+        nextGrillSpotIndex = 0;
+        nextServingSpotIndex = 0;
     }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0)) // For mouse click or tap on screen
@@ -172,6 +170,4 @@ public class BeefSpawner : MonoBehaviour
 
         beef.transform.position = targetPosition;
     }
-
-
 }
