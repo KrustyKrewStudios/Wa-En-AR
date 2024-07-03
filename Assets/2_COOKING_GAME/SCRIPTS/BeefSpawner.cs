@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BeefSpawner : MonoBehaviour
@@ -10,10 +11,13 @@ public class BeefSpawner : MonoBehaviour
     public Transform[] servingPlateSpots; // Assign multiple serving plate spots in the inspector
 
     public float dropHeight = 2.0f; // Height from which the beef drops
-    private int nextGrillSpotIndex = 0; // Index to track the next available grill spot
-    private int nextServingSpotIndex = 0; // Index to track the next available serving spot
 
     private GameObject selectedBeef; // Currently selected beef
+
+    private bool[] grillSpotOccupied;
+    private bool[] servingSpotOccupied;
+
+    private Dictionary<GameObject, int> beefSpotIndexMap; // Maps beef objects to their spot indices
 
     void Start()
     {
@@ -26,11 +30,18 @@ public class BeefSpawner : MonoBehaviour
         {
             Debug.LogError("No serving plate spots assigned!");
         }
+
+        grillSpotOccupied = new bool[grillSpots.Length];
+        servingSpotOccupied = new bool[servingPlateSpots.Length];
+
+        beefSpotIndexMap = new Dictionary<GameObject, int>();
     }
 
     public void SpawnKarubi()
     {
-        if (nextGrillSpotIndex >= grillSpots.Length)
+        int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
+
+        if (nextGrillSpotIndex == -1)
         {
             Debug.Log("All grill spots are occupied.");
             return;
@@ -42,12 +53,15 @@ public class BeefSpawner : MonoBehaviour
         GameObject newKarubi = Instantiate(karubiPrefab, spawnPosition, Quaternion.identity);
         StartCoroutine(DropToGrill(newKarubi, spawnSpot.position));
 
-        nextGrillSpotIndex++;
+        grillSpotOccupied[nextGrillSpotIndex] = true;
+        beefSpotIndexMap[newKarubi] = nextGrillSpotIndex; // Map beef to grill spot index
     }
 
     public void SpawnSirloin()
     {
-        if (nextGrillSpotIndex >= grillSpots.Length)
+        int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
+
+        if (nextGrillSpotIndex == -1)
         {
             Debug.Log("All grill spots are occupied.");
             return;
@@ -59,7 +73,8 @@ public class BeefSpawner : MonoBehaviour
         GameObject newSirloin = Instantiate(sirloinPrefab, spawnPosition, Quaternion.identity);
         StartCoroutine(DropToGrill(newSirloin, spawnSpot.position));
 
-        nextGrillSpotIndex++;
+        grillSpotOccupied[nextGrillSpotIndex] = true;
+        beefSpotIndexMap[newSirloin] = nextGrillSpotIndex; // Map beef to grill spot index
     }
 
     private IEnumerator DropToGrill(GameObject beef, Vector3 targetPosition)
@@ -78,7 +93,6 @@ public class BeefSpawner : MonoBehaviour
         beef.transform.position = targetPosition;
     }
 
-    // Method to clear all spawned beef from the scene
     public void ClearBeef()
     {
         GameObject[] karubiObjects = GameObject.FindGameObjectsWithTag("Karubi");
@@ -96,8 +110,17 @@ public class BeefSpawner : MonoBehaviour
         Debug.Log("All spawned beef (Karubi and Sirloin) has been cleared from the scene.");
 
         // Reset the indices after clearing the beef
-        nextGrillSpotIndex = 0;
-        nextServingSpotIndex = 0;
+        for (int i = 0; i < grillSpotOccupied.Length; i++)
+        {
+            grillSpotOccupied[i] = false;
+        }
+
+        for (int i = 0; i < servingSpotOccupied.Length; i++)
+        {
+            servingSpotOccupied[i] = false;
+        }
+
+        beefSpotIndexMap.Clear(); // Clear the map
     }
 
     void Update()
@@ -127,32 +150,45 @@ public class BeefSpawner : MonoBehaviour
     {
         if (selectedBeef == null) return;
 
-        if (selectedBeef.transform.parent == null || selectedBeef.transform.parent.CompareTag("Grill"))
+        if (beefSpotIndexMap.TryGetValue(selectedBeef, out int currentSpotIndex))
         {
-            if (nextServingSpotIndex >= servingPlateSpots.Length)
+            if (selectedBeef.transform.parent == null || selectedBeef.transform.parent.CompareTag("Grill"))
             {
-                Debug.Log("All serving spots are occupied.");
-                return;
+                int nextServingSpotIndex = GetNextAvailableSpot(servingSpotOccupied);
+
+                if (nextServingSpotIndex == -1)
+                {
+                    Debug.Log("All serving spots are occupied.");
+                    return;
+                }
+
+                Transform servingSpot = servingPlateSpots[nextServingSpotIndex];
+                StartCoroutine(MoveBeef(selectedBeef, servingSpot.position));
+
+                servingSpotOccupied[nextServingSpotIndex] = true;
+                grillSpotOccupied[currentSpotIndex] = false;
+                beefSpotIndexMap[selectedBeef] = nextServingSpotIndex; // Update the map to serving spot index
+            }
+            else if (selectedBeef.transform.parent.CompareTag("ServingPlate"))
+            {
+                int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
+
+                if (nextGrillSpotIndex == -1)
+                {
+                    Debug.Log("All grill spots are occupied.");
+                    return;
+                }
+
+                Transform grillSpot = grillSpots[nextGrillSpotIndex];
+                StartCoroutine(MoveBeef(selectedBeef, grillSpot.position));
+
+                grillSpotOccupied[nextGrillSpotIndex] = true;
+                servingSpotOccupied[currentSpotIndex] = false;
+                beefSpotIndexMap[selectedBeef] = nextGrillSpotIndex; // Update the map to grill spot index
             }
 
-            Transform servingSpot = servingPlateSpots[nextServingSpotIndex];
-            StartCoroutine(MoveBeef(selectedBeef, servingSpot.position));
-            nextServingSpotIndex++;
+            selectedBeef = null; // Deselect the beef after moving
         }
-        else if (selectedBeef.transform.parent.CompareTag("ServingPlate"))
-        {
-            if (nextGrillSpotIndex >= grillSpots.Length)
-            {
-                Debug.Log("All grill spots are occupied.");
-                return;
-            }
-
-            Transform grillSpot = grillSpots[nextGrillSpotIndex];
-            StartCoroutine(MoveBeef(selectedBeef, grillSpot.position));
-            nextGrillSpotIndex++;
-        }
-
-        selectedBeef = null; // Deselect the beef after moving
     }
 
     private IEnumerator MoveBeef(GameObject beef, Vector3 targetPosition)
@@ -169,5 +205,17 @@ public class BeefSpawner : MonoBehaviour
         }
 
         beef.transform.position = targetPosition;
+    }
+
+    private int GetNextAvailableSpot(bool[] spotOccupiedArray)
+    {
+        for (int i = 0; i < spotOccupiedArray.Length; i++)
+        {
+            if (!spotOccupiedArray[i])
+            {
+                return i;
+            }
+        }
+        return -1; // No available spots
     }
 }

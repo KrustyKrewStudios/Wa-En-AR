@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using static BeefBase;
+using System.Collections;
 
 public class OrderManager : MonoBehaviour
 {
@@ -14,12 +15,16 @@ public class OrderManager : MonoBehaviour
 
     private int currentOrderIndex = 0; // Index to keep track of the current order
 
-
-    public ServingPlate servingPlate; // Reference to the ServingPlate script
-
+    private ServingPlate servingPlate; // Reference to the ServingPlate script
 
     private void Start()
     {
+        servingPlate = FindObjectOfType<ServingPlate>(); // Assuming ServingPlate script is attached to the serving plate game object
+        if (servingPlate == null)
+        {
+            Debug.LogError("ServingPlate script not found!");
+        }
+
         StartMinigame();
     }
 
@@ -83,8 +88,6 @@ public class OrderManager : MonoBehaviour
         }
     }
 
-
-
     public void SelectBeef(GameObject beefObject)
     {
         // Move the beef to the serving plate
@@ -127,7 +130,7 @@ public class OrderManager : MonoBehaviour
                     {
                         Debug.Log("Order checked: Correct!");
                         orderText.text = "Order Checked: Correct!";
-                        SetNextOrder(); // Set the next order
+                        StartCoroutine(RemoveBeefAfterDelay(beefOnPlate)); // Start coroutine to remove beef
                     }
                     else
                     {
@@ -153,9 +156,30 @@ public class OrderManager : MonoBehaviour
             orderText.text = "No beef selected to check order.";
         }
     }
+
+    private IEnumerator RemoveBeefAfterDelay(GameObject beef)
+    {
+        yield return new WaitForSeconds(1.0f); // Wait for 1 second before removing the beef
+
+        float duration = 0.5f; // Duration of the scale-down animation
+        Vector3 startScale = beef.transform.localScale;
+        Vector3 endScale = Vector3.zero; // Target scale is zero to make the beef disappear
+        float elapsedTime = 0;
+
+        while (elapsedTime < duration)
+        {
+            beef.transform.localScale = Vector3.Lerp(startScale, endScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        beef.transform.localScale = endScale;
+        Destroy(beef); // Remove the beef object from the scene
+        SetNextOrder(); // Set the next order after the beef is removed
+    }
 }
 
-    public enum BeefType
+public enum BeefType
 {
     Karubi,
     Sirloin,
@@ -170,4 +194,3 @@ public enum BeefState
     WellDone,
     Burnt
 }
-    
