@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Grill
   - Beef
+  - Mesh3
+  - Mesh4
+  - Picker
   layers:
   - Default
   - TransparentFX
