@@ -8,8 +8,8 @@ public class PairingGame : MonoBehaviour
 {
     //Declaration of values
     public GameObject wheel;
-    public GameObject beef1;
-    public string[] scriptNamesToDisable;
+    //public GameObject beef1;
+    //public string[] scriptNamesToDisable;
 
     //Spin timer
     public float spinDuration = 5f;
@@ -23,10 +23,10 @@ public class PairingGame : MonoBehaviour
 
     void Start()
     {
-        DisableScripts(beef1, scriptNamesToDisable);
+        //DisableScripts(beef1, scriptNamesToDisable);
     }
 
-    void DisableScripts(GameObject gameObject, string[] scriptNames)
+    /*void DisableScripts(GameObject gameObject, string[] scriptNames)
     {
         foreach (string scriptName in scriptNames)
         {
@@ -40,7 +40,7 @@ public class PairingGame : MonoBehaviour
         {
             gameObject.SendMessage("SetScriptEnabled", SendMessageOptions.DontRequireReceiver);
         }
-    }
+    }*/
 
     void Update()
     {
@@ -103,7 +103,6 @@ public class PairingGame : MonoBehaviour
             if (other.CompareTag("Mesh3"))
             {
                 resultToShow = "Result: 3";
-                EnableScripts(beef1, scriptNamesToDisable);
             }
             else if (other.CompareTag("Mesh4"))
             {
