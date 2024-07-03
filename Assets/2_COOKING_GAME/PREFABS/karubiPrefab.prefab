@@ -153,7 +153,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: f7c336ee9cb185540b91d47ee568ef51, type: 2}
   - {fileID: 2100000, guid: 882e433a4e1c8064da2d63175b756101, type: 2}
   - {fileID: 2100000, guid: b9d892a93b68ece42bd59710f7bb997f, type: 2}
-  baseCookingTime: 10
+  baseCookingTime: 7
   progressBarUI: {fileID: 2382997207141593263}
   progressBar: {fileID: 6932502350806042095}
   progressBarTransform: {fileID: 0}

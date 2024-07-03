@@ -16,6 +16,7 @@ public class BeefSpawner : MonoBehaviour
 
     private bool[] grillSpotOccupied;
     private bool servingSpotOccupied = false; // Track if serving plate spot is occupied
+    private GameObject plateBeef; // Store the reference to the beef object
 
     private Dictionary<GameObject, int> beefSpotIndexMap; // Maps beef objects to their spot indices
 
@@ -42,8 +43,9 @@ public class BeefSpawner : MonoBehaviour
 
         Transform spawnSpot = grillSpots[nextGrillSpotIndex];
         Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
+        Quaternion spawnRotation = Quaternion.Euler(0f, 90f, 0f); // Rotate 90 degrees on the Y-axis
 
-        GameObject newKarubi = Instantiate(karubiPrefab, spawnPosition, Quaternion.identity);
+        GameObject newKarubi = Instantiate(karubiPrefab, spawnPosition, spawnRotation);
         StartCoroutine(DropToGrill(newKarubi, spawnSpot.position));
 
         grillSpotOccupied[nextGrillSpotIndex] = true;
@@ -62,8 +64,9 @@ public class BeefSpawner : MonoBehaviour
 
         Transform spawnSpot = grillSpots[nextGrillSpotIndex];
         Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
+        Quaternion spawnRotation = Quaternion.Euler(0f, 90f, 0f); // Rotate 90 degrees on the Y-axis
 
-        GameObject newSirloin = Instantiate(sirloinPrefab, spawnPosition, Quaternion.identity);
+        GameObject newSirloin = Instantiate(sirloinPrefab, spawnPosition, spawnRotation);
         StartCoroutine(DropToGrill(newSirloin, spawnSpot.position));
 
         grillSpotOccupied[nextGrillSpotIndex] = true;
@@ -207,4 +210,37 @@ public class BeefSpawner : MonoBehaviour
         }
         return -1; // No available spots
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Karubi") || other.CompareTag("Sirloin"))
+        {
+            // Set serving spot occupied status
+            servingSpotOccupied = true;
+
+            // Optionally, you can store the reference to the beef object for further interaction.
+            plateBeef = other.gameObject;
+        }
+    }
+
+    public void ClearServingPlate()
+    {
+        if (servingSpotOccupied)
+        {
+            if (plateBeef != null)
+            {
+                // Destroy the beef object if it exists
+                Destroy(plateBeef);
+                plateBeef = null; // Clear the reference after destroying
+            }
+
+            // Reset serving spot occupied status
+            servingSpotOccupied = false;
+        }
+        else
+        {
+            Debug.Log("Serving plate spot is already clear.");
+        }
+    }
+
 }
