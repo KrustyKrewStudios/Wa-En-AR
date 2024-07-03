@@ -6,6 +6,15 @@ namespace Imagine.WebAR
 {
     public class SwipeToRotateY : MonoBehaviour
     {
+        public void SetScriptEnabled()
+        {
+            this.enabled = true;
+        }
+
+        public void SetScriptDisabled()
+        {
+            this.enabled = false;
+        }
 
         [SerializeField] private Transform rotTransform;
         //TODO: implement using Screen.DPI / Canvas.innerWidth.Height API grabber

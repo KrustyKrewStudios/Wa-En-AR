@@ -8,6 +8,9 @@ TagManager:
   - Beef
   - Mesh3
   - Mesh4
+  - Mesh5
+  - Mesh1
+  - Mesh2
   - Picker
   layers:
   - Default

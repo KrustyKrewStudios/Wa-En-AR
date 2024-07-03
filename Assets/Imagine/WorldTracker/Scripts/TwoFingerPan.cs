@@ -6,6 +6,16 @@ namespace Imagine.WebAR
 {
     public class TwoFingerPan : MonoBehaviour
     {
+        public void SetScriptEnabled()
+        {
+            this.enabled = true;
+        }
+
+        public void SetScriptDisabled()
+        {
+            this.enabled = false;
+        }
+
         [SerializeField] Transform panTransform;
         public Transform cam;
         Vector3 origPos, startPos;

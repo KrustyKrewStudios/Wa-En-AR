@@ -6,6 +6,16 @@ namespace Imagine.WebAR
 {
     public class PinchToScale : MonoBehaviour
     {
+        public void SetScriptEnabled()
+        {
+            this.enabled = true;
+        }
+
+        public void SetScriptDisabled()
+        {
+            this.enabled = false;
+        }
+
         [SerializeField] Transform scaleTransform;
         Vector3 origScale, startScale;
         Vector2 touch0StartPos, touch1StartPos;
