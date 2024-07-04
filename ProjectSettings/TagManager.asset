@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Grill
   - Beef
+  - Karubi
+  - Sirloin
+  - ServingPlate
   layers:
   - Default
   - TransparentFX
@@ -13,8 +16,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Triggers
+  - Interactable
   - 
   - 
   - 

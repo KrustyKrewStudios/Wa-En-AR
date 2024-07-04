@@ -15,15 +15,11 @@ public class OrderManager : MonoBehaviour
 
     private int currentOrderIndex = 0; // Index to keep track of the current order
 
-    private ServingPlate servingPlate; // Reference to the ServingPlate script
+    public BeefSpawner beefSpawner; // Reference to the BeefSpawner script
 
     private void Start()
     {
-        servingPlate = FindObjectOfType<ServingPlate>(); // Assuming ServingPlate script is attached to the serving plate game object
-        if (servingPlate == null)
-        {
-            Debug.LogError("ServingPlate script not found!");
-        }
+
 
         StartMinigame();
     }
@@ -98,7 +94,7 @@ public class OrderManager : MonoBehaviour
     // Function to check the order when the serve button is clicked
     public void ServeBeef()
     {
-        GameObject beefOnPlate = servingPlate.GetBeefOnPlate();
+        GameObject beefOnPlate = beefSpawner.GetBeefOnPlate();
 
         if (beefOnPlate != null)
         {

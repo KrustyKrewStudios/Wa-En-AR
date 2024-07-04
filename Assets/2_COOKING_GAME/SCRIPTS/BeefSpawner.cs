@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BeefSpawner : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class BeefSpawner : MonoBehaviour
     private GameObject plateBeef; // Store the reference to the beef object
 
     private Dictionary<GameObject, int> beefSpotIndexMap; // Maps beef objects to their spot indices
+
+    public LayerMask raycastLayerMask; // Add a LayerMask for Raycast
 
     void Start()
     {
@@ -119,22 +122,50 @@ public class BeefSpawner : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0)) // For mouse click or tap on screen
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            Debug.Log("Mouse button down detected.");
+            HandleInput(Input.mousePosition);
+        }
+
+        // Handle touch input
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
             {
-                GameObject hitObject = hit.transform.gameObject;
-                if (hitObject.CompareTag("Karubi") || hitObject.CompareTag("Sirloin"))
+                Debug.Log("Touch detected.");
+                HandleInput(touch.position);
+            }
+        }
+    }
+
+    private void HandleInput(Vector2 screenPosition)
+    {
+        Debug.Log("Handling input at screen position: " + screenPosition);
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask)) // Use the LayerMask in the Raycast
+        {
+            GameObject hitObject = hit.transform.gameObject;
+            Debug.Log("Raycast hit object: " + hitObject.name);
+
+            if (hitObject.CompareTag("Karubi") || hitObject.CompareTag("Sirloin"))
+            {
+                selectedBeef = hitObject;
+                Debug.Log("Selected beef: " + selectedBeef.name);
+            }
+            else if (hitObject.CompareTag("ServingPlate"))
+            {
+                Debug.Log("Serving plate tapped.");
+                if (selectedBeef != null)
                 {
-                    selectedBeef = hitObject;
-                    Debug.Log("Selected beef: " + selectedBeef.name);
+                    MoveSelectedBeef();
                 }
             }
         }
-
-        if (selectedBeef != null && Input.GetKeyDown(KeyCode.Space)) // Space key to move beef (for testing)
+        else
         {
-            MoveSelectedBeef();
+            Debug.Log("Raycast did not hit any objects.");
         }
     }
 
@@ -218,9 +249,25 @@ public class BeefSpawner : MonoBehaviour
             // Set serving spot occupied status
             servingSpotOccupied = true;
 
-            // Optionally, you can store the reference to the beef object for further interaction.
+            // Store the reference to the beef object for further interaction.
             plateBeef = other.gameObject;
+            Debug.Log("Beef moved onto plate: " + plateBeef.name);
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == plateBeef)
+        {
+            plateBeef = null;
+            Debug.Log("Beef removed from plate.");
+            servingSpotOccupied = false;
+        }
+    }
+
+    public GameObject GetBeefOnPlate()
+    {
+        return plateBeef;
     }
 
     public void ClearServingPlate()
@@ -239,8 +286,7 @@ public class BeefSpawner : MonoBehaviour
         }
         else
         {
-            Debug.Log("Serving plate spot is already clear.");
+            Debug.Log("Serving plate is already empty.");
         }
     }
-
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5751414357210011188}
   - component: {fileID: 8484860939691028914}
   - component: {fileID: 2327810958295240112}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 9039165103962957582}
   - component: {fileID: 6824173062501060282}
   - component: {fileID: 9055630827730710830}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 6641438462503573776}
   - component: {fileID: 1232834870674598374}
   - component: {fileID: 8133753504682331746}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: sirloinPrefab
   m_TagString: Sirloin
   m_Icon: {fileID: 0}
@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 8116741060655072646}
   - component: {fileID: 89818900162124101}
   - component: {fileID: 366776106196629949}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Progress Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

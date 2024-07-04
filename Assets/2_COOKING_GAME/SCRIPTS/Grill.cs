@@ -10,18 +10,18 @@ public class Grill : MonoBehaviour
     public bool isTurnedOn = false;
     public event Action OnGrillStateChanged;
 
-    public Material[] stateMaterials; // Ensure this array has 4 materials for Off, Low, Medium, High
-    private Renderer grillRenderer;
+   // public Material[] stateMaterials; // Ensure this array has 4 materials for Off, Low, Medium, High
+    //private Renderer grillRenderer;
 
     private void Start()
     {
-        grillRenderer = GetComponent<Renderer>();
-        if (grillRenderer == null)
-        {
-            Debug.LogError("Renderer component not found on the Grill GameObject.");
-            return;
-        }
-        UpdateGrillState(); // Initialize the grill material based on the default state
+      //  grillRenderer = GetComponent<Renderer>();
+     //   if (grillRenderer == null)
+      //  {
+      //      Debug.LogError("Renderer component not found on the Grill GameObject.");
+      //      return;
+      //  }
+      //  UpdateGrillState(); // Initialize the grill material based on the default state
     }
 
     public void IncreaseGrillState()
@@ -59,14 +59,13 @@ public class Grill : MonoBehaviour
         Debug.Log("Grill Turned On: " + isTurnedOn);
 
         // Update the grill material based on the current state
-        if (stateMaterials != null && stateMaterials.Length == Enum.GetNames(typeof(GrillState)).Length)
-        {
-            grillRenderer.material = stateMaterials[(int)currentState];
-        }
-        else
-        {
-            Debug.LogError("State materials array is not properly set up.");
-        }
+ //       if (stateMaterials != null && stateMaterials.Length == Enum.GetNames(typeof(GrillState)).Length)
+ //       {
+  //          grillRenderer.material = stateMaterials[(int)currentState];
+  //      }
+  //     else
+   ///        Debug.LogError("State materials array is not properly set up.");
+    //    }
 
         // Invoke the OnGrillStateChanged event if there are any subscribers
         OnGrillStateChanged?.Invoke();

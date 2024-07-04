@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2446375672707036275}
   - component: {fileID: 1749019788551457832}
   - component: {fileID: 1898306123224118216}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: karubiPrefab
   m_TagString: Karubi
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 2852223163881878749}
   - component: {fileID: 7417835617882496462}
   - component: {fileID: 6932502350806042095}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 1386036293159023761}
   - component: {fileID: 8247083804689901743}
   - component: {fileID: 8187791550887669201}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Progress Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 312408314828977643}
   - component: {fileID: 1381923634830520488}
   - component: {fileID: 5411366640138965228}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
