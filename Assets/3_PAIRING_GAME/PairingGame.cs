@@ -89,7 +89,7 @@ public class PairingGame : MonoBehaviour
             isSpinning = true;
             currentSpeed = 1000f;
             spinTimer = spinDuration;
-            resultToShow = " ";
+            resultText.text = " ";
         }
 
 
@@ -102,7 +102,7 @@ public class PairingGame : MonoBehaviour
         {
             if (other.CompareTag("Mesh3"))
             {
-                resultToShow = "Result: 3";
+                resultToShow = "Result: Beef";
             }
             else if (other.CompareTag("Mesh4"))
             {
