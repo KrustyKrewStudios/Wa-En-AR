@@ -10,7 +10,10 @@ public class Grill : MonoBehaviour
     public bool isTurnedOn = false;
     public event Action OnGrillStateChanged;
 
-   // public Material[] stateMaterials; // Ensure this array has 4 materials for Off, Low, Medium, High
+    public ParticleSystem tinyFireParticles;
+    public ParticleSystem mediumFireParticles;
+    public ParticleSystem bigFireParticles;
+    // public Material[] stateMaterials; // Ensure this array has 4 materials for Off, Low, Medium, High
     //private Renderer grillRenderer;
 
     private void Start()
