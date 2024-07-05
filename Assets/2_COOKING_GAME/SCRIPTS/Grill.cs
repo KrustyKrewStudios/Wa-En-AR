@@ -24,7 +24,7 @@ public class Grill : MonoBehaviour
       //      Debug.LogError("Renderer component not found on the Grill GameObject.");
       //      return;
       //  }
-      //  UpdateGrillState(); // Initialize the grill material based on the default state
+      UpdateGrillState(); 
     }
 
     public void IncreaseGrillState()
@@ -54,10 +54,14 @@ public class Grill : MonoBehaviour
         if (currentState == GrillState.Off)
         {
             isTurnedOn = false;
+            DisableAllParticleSystems();
+
         }
         else
         {
             isTurnedOn = true;
+            UpdateParticleSystems();
+
         }
         Debug.Log("Grill Turned On: " + isTurnedOn);
 
@@ -73,6 +77,32 @@ public class Grill : MonoBehaviour
         // Invoke the OnGrillStateChanged event if there are any subscribers
         OnGrillStateChanged?.Invoke();
     }
+
+    private void UpdateParticleSystems()
+    {
+        DisableAllParticleSystems(); // Disable all first
+
+        switch (currentState)
+        {
+            case GrillState.Low:
+                tinyFireParticles.Play();
+                break;
+            case GrillState.Medium:
+                mediumFireParticles.Play();
+                break;
+            case GrillState.High:
+                bigFireParticles.Play();
+                break;
+        }
+    }
+
+    private void DisableAllParticleSystems()
+    {
+        tinyFireParticles.Stop();
+        mediumFireParticles.Stop();
+        bigFireParticles.Stop();
+    }
+
 
     public GrillState GetCurrentGrillState()
     {
