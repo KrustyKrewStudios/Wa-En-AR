@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/2_COOKING_GAME/test.unity
-    guid: d3761b95d0b8a0a4dafdbf3900dd9cd5
+    path: Assets/werk.unity
+    guid: 5340183c50930574388e585e153621fe
   m_configObjects: {}
