@@ -13,18 +13,49 @@ public class Grill : MonoBehaviour
     public ParticleSystem tinyFireParticles;
     public ParticleSystem mediumFireParticles;
     public ParticleSystem bigFireParticles;
+    public GameObject tinyFire;
+    public GameObject mediumFire;
+    public GameObject bigFire;
+
+    private int beefCountInTrigger = 0;
+    public List<string> beefTags = new List<string> { "BeefKarubi", "BeefSirloin", "BeefRibeye" };
+
+    public AudioSource sizzlingAudioSource;
+
     // public Material[] stateMaterials; // Ensure this array has 4 materials for Off, Low, Medium, High
     //private Renderer grillRenderer;
 
     private void Start()
     {
+
       //  grillRenderer = GetComponent<Renderer>();
      //   if (grillRenderer == null)
       //  {
       //      Debug.LogError("Renderer component not found on the Grill GameObject.");
       //      return;
       //  }
-      UpdateGrillState(); 
+
+          UpdateGrillState();
+
+
+        sizzlingAudioSource.Stop(); // Ensure the audio source is stopped at the start
+        
+
+    }
+    private void OnEnable()
+    {
+        tinyFire.SetActive(false);
+        mediumFire.SetActive(false);
+        bigFire.SetActive(false);
+        tinyFireParticles.Clear();
+        mediumFireParticles.Clear();
+        bigFireParticles.Clear();
+        tinyFireParticles.Stop();
+        mediumFireParticles.Stop();
+        bigFireParticles.Stop();
+
+
+
     }
 
     public void IncreaseGrillState()
@@ -66,13 +97,16 @@ public class Grill : MonoBehaviour
         Debug.Log("Grill Turned On: " + isTurnedOn);
 
         // Update the grill material based on the current state
- //       if (stateMaterials != null && stateMaterials.Length == Enum.GetNames(typeof(GrillState)).Length)
- //       {
-  //          grillRenderer.material = stateMaterials[(int)currentState];
-  //      }
-  //     else
-   ///        Debug.LogError("State materials array is not properly set up.");
-    //    }
+        //       if (stateMaterials != null && stateMaterials.Length == Enum.GetNames(typeof(GrillState)).Length)
+        //       {
+        //          grillRenderer.material = stateMaterials[(int)currentState];
+        //      }
+        //     else
+        ///        Debug.LogError("State materials array is not properly set up.");
+        //    }
+
+        // Manage audio playback
+        UpdateSizzlingAudio();
 
         // Invoke the OnGrillStateChanged event if there are any subscribers
         OnGrillStateChanged?.Invoke();
@@ -80,7 +114,12 @@ public class Grill : MonoBehaviour
 
     private void UpdateParticleSystems()
     {
+
         DisableAllParticleSystems(); // Disable all first
+        tinyFire.SetActive(true);
+        mediumFire.SetActive(true);
+        bigFire.SetActive(true);    
+
 
         switch (currentState)
         {
@@ -108,4 +147,38 @@ public class Grill : MonoBehaviour
     {
         return currentState;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (beefTags.Contains(other.tag))
+        {
+            beefCountInTrigger++;
+            UpdateSizzlingAudio();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (beefTags.Contains(other.tag))
+        {
+            beefCountInTrigger = Mathf.Max(0, beefCountInTrigger - 1);
+            UpdateSizzlingAudio();
+        }
+    }
+
+    private void UpdateSizzlingAudio()
+    {
+        if (isTurnedOn && beefCountInTrigger > 0)
+        {
+            if (!sizzlingAudioSource.isPlaying)
+            {
+                sizzlingAudioSource.Play();
+            }
+        }
+        else
+        {
+            sizzlingAudioSource.Stop();
+        }
+    }
+
+
 }
