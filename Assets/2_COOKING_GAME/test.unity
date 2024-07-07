@@ -3432,7 +3432,7 @@ Transform:
   m_GameObject: {fileID: 382475044}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0685, y: 0.0157, z: 0.1184}
+  m_LocalPosition: {x: -0.0685, y: 0.0157, z: 0.112}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5729,7 +5729,7 @@ Transform:
   m_GameObject: {fileID: 774046600}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15, y: 0.0157, z: -0.0078}
+  m_LocalPosition: {x: -0.1358, y: 0.0157, z: -0.0078}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7000,7 +7000,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1016244545
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7467,7 +7467,7 @@ Transform:
   m_GameObject: {fileID: 1091145671}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0685, y: 0.0157, z: -0.1321}
+  m_LocalPosition: {x: -0.062299993, y: 0.0157, z: -0.12309999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8286,7 +8286,7 @@ Transform:
   m_GameObject: {fileID: 1224324201}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0866, y: 0.0157, z: 0.1184}
+  m_LocalPosition: {x: 0.0866, y: 0.0157, z: 0.11199999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10104,7 +10104,7 @@ GameObject:
   - component: {fileID: 1514874949}
   - component: {fileID: 1514874948}
   m_Layer: 5
-  m_Name: Button (8)
+  m_Name: Chuck Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10174,7 +10174,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1514874949}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1574931592}
+        m_TargetAssemblyTypeName: BeefSpawner, Assembly-CSharp
+        m_MethodName: SpawnChuck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1514874949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11005,15 +11017,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9036112425031956280, guid: d4ca1f7d54077514987e6d9df4de0831,
         type: 3}
+      propertyPath: chuckPrefab
+      value: 
+      objectReference: {fileID: 2617122536778743085, guid: 78898ab17bdd0e0499d26e9f35312a8e,
+        type: 3}
+    - target: {fileID: 9036112425031956280, guid: d4ca1f7d54077514987e6d9df4de0831,
+        type: 3}
       propertyPath: karubiPrefab
       value: 
-      objectReference: {fileID: 594037176639724522, guid: 27e28c7ff177d9f47a206ae7ef00345f,
+      objectReference: {fileID: 4416529225701115903, guid: 16803032c0dd65242a3a1ae40855d171,
+        type: 3}
+    - target: {fileID: 9036112425031956280, guid: d4ca1f7d54077514987e6d9df4de0831,
+        type: 3}
+      propertyPath: ribeyePrefab
+      value: 
+      objectReference: {fileID: 6030332838322741280, guid: 49df99aa01757924eb4fd2fee58e9172,
+        type: 3}
+    - target: {fileID: 9036112425031956280, guid: d4ca1f7d54077514987e6d9df4de0831,
+        type: 3}
+      propertyPath: tonguePrefab
+      value: 
+      objectReference: {fileID: 4284273995445352346, guid: 6c4dca98448afc94fb8fd9a6ff9056f6,
         type: 3}
     - target: {fileID: 9036112425031956280, guid: d4ca1f7d54077514987e6d9df4de0831,
         type: 3}
       propertyPath: sirloinPrefab
       value: 
-      objectReference: {fileID: 3465634273724442195, guid: f393426d5e160d94d9355f52e959bda3,
+      objectReference: {fileID: 525913136123012729, guid: 6a50c1d37a4f1b5409793e116a328832,
         type: 3}
     - target: {fileID: 9036112425031956280, guid: d4ca1f7d54077514987e6d9df4de0831,
         type: 3}
@@ -11963,7 +11993,7 @@ Transform:
   m_GameObject: {fileID: 1665208660}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0866, y: 0.0157, z: -0.1321}
+  m_LocalPosition: {x: 0.0866, y: 0.0157, z: -0.1231}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11994,7 +12024,7 @@ Transform:
   m_GameObject: {fileID: 1665639823}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.15, y: 0.0157, z: -0.0078}
+  m_LocalPosition: {x: 0.146, y: 0.0157, z: -0.0078}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12362,7 +12392,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Karubi
+  m_text: Tongue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 55ccaadd5eb5f2640aaf04d62f086d90, type: 2}
   m_sharedMaterial: {fileID: -2584098985801774412, guid: 55ccaadd5eb5f2640aaf04d62f086d90,
@@ -13882,7 +13912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1936082994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13994,13 +14024,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1936082993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.17203115, y: -0, z: -0, w: 0.9850915}
-  m_LocalPosition: {x: 0, y: 0.821, z: -1.325}
+  m_LocalRotation: {x: 0.29839602, y: -0, z: -0, w: 0.95444214}
+  m_LocalPosition: {x: 0, y: 1.034, z: -0.742}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 19.812, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 34.723, y: 0, z: 0}
 --- !u!1 &1949723560
 GameObject:
   m_ObjectHideFlags: 0
@@ -14417,7 +14447,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Karubi
+  m_text: 'Chuck
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 55ccaadd5eb5f2640aaf04d62f086d90, type: 2}
   m_sharedMaterial: {fileID: -2584098985801774412, guid: 55ccaadd5eb5f2640aaf04d62f086d90,
@@ -14643,7 +14675,7 @@ GameObject:
   - component: {fileID: 2103436395}
   - component: {fileID: 2103436394}
   m_Layer: 5
-  m_Name: Button (9)
+  m_Name: Tongue Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14713,7 +14745,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2103436395}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1574931592}
+        m_TargetAssemblyTypeName: BeefSpawner, Assembly-CSharp
+        m_MethodName: SpawnTongue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2103436395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15037,7 +15081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2135004581
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15318,7 +15362,7 @@ PrefabInstance:
     - target: {fileID: 333885513733415191, guid: a3655474ed47049c3ac00944c2e5d727,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 333885515070669820, guid: a3655474ed47049c3ac00944c2e5d727,
         type: 3}
@@ -16991,7 +17035,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &6527891777138659787
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17526,7 +17570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &6527891777977467459
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17820,7 +17864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &6527891778220568167
 BoxCollider:
   m_ObjectHideFlags: 0

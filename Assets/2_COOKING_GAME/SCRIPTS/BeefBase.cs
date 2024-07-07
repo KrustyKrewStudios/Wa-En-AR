@@ -21,7 +21,6 @@ public abstract class BeefBase : MonoBehaviour
 
     public GameObject progressBarUI;
     public Image progressBar;
-    public Transform progressBarTransform;
 
     protected virtual void Start()
     {
