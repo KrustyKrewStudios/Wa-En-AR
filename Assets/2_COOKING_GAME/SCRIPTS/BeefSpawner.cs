@@ -93,7 +93,7 @@ public class BeefSpawner : MonoBehaviour
 
         Transform spawnSpot = grillSpots[nextGrillSpotIndex];
         Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
-        Quaternion spawnRotation = Quaternion.Euler(0f, 90f, 0f); // Rotate 90 degrees on the Y-axis
+        Quaternion spawnRotation = Quaternion.Euler(90f, 90f, 0f); // Rotate 90 degrees on the Y-axis
 
         GameObject newRibeye = Instantiate(ribeyePrefab, spawnPosition, spawnRotation);
         StartCoroutine(DropToGrill(newRibeye, spawnSpot.position));
