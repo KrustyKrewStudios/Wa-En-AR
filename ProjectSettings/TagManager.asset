@@ -9,6 +9,12 @@ TagManager:
   - Karubi
   - Sirloin
   - ServingPlate
+  - Mesh3
+  - Mesh4
+  - Mesh5
+  - Mesh1
+  - Mesh2
+  - Picker
   layers:
   - Default
   - TransparentFX
