@@ -1,104 +1,246 @@
-using Imagine.WebAR;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BeefSpawner : MonoBehaviour
 {
-    public GameObject beefPrefab; // Assign the beef prefab in the inspector
-    public Transform spawnPoint; // Assign the spawn point in the inspector
+    public GameObject karubiPrefab;
+    public GameObject sirloinPrefab;
 
-    public Transform arCameraTransform; // Public variable for AR camera transform
+    public Transform[] grillSpots; // Assign multiple grill spots in the inspector
+    public Transform servingPlateSpot; // Single serving plate spot
 
-    public ARCamera ARCamera;
+    public float dropHeight = 2.0f; // Height from which the beef drops
 
-    private bool isBeefSpawned = false; // Flag to track if a beef is currently spawned
+    private GameObject selectedBeef; // Currently selected beef
 
-    public BoxCollider spawnCollider; // Reference to the BoxCollider component
+    private bool[] grillSpotOccupied;
+    private bool servingSpotOccupied = false; // Track if serving plate spot is occupied
+    private GameObject plateBeef; // Store the reference to the beef object
+
+    private Dictionary<GameObject, int> beefSpotIndexMap; // Maps beef objects to their spot indices
 
     void Start()
     {
-        // Get the BoxCollider component from the spawn point
-        spawnCollider = spawnPoint.GetComponent<BoxCollider>();
-
-        if (spawnCollider == null)
+        if (grillSpots == null || grillSpots.Length == 0)
         {
-            Debug.LogError("No BoxCollider found on the spawn point!");
+            Debug.LogError("No grill spots assigned!");
         }
+
+        grillSpotOccupied = new bool[grillSpots.Length];
+        beefSpotIndexMap = new Dictionary<GameObject, int>();
     }
 
-    public void SpawnBeef()
+    public void SpawnKarubi()
     {
-        // Check for colliders within the spawn collider
-        Collider[] colliders = Physics.OverlapBox(spawnCollider.bounds.center, spawnCollider.bounds.extents, Quaternion.identity);
+        int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
 
-        // Filter colliders to check for "Beef"
-        bool foundBeef = false;
-        foreach (Collider collider in colliders)
+        if (nextGrillSpotIndex == -1)
         {
-            if (collider.CompareTag("Beef"))
-            {
-                foundBeef = true;
-                break;
-            }
-        }
-
-        // If there are beef colliders inside the spawn collider, do not spawn a new beef
-        if (foundBeef)
-        {
-            Debug.Log("Cannot spawn beef: There are beef objects within the spawn area.");
+            Debug.Log("All grill spots are occupied.");
             return;
         }
 
-        // If no beef colliders are detected, instantiate the beef prefab at the spawn point position and rotation
-        GameObject newBeef = Instantiate(beefPrefab, spawnPoint.position, spawnPoint.rotation);
+        Transform spawnSpot = grillSpots[nextGrillSpotIndex];
+        Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
+        Quaternion spawnRotation = Quaternion.Euler(0f, 90f, 0f); // Rotate 90 degrees on the Y-axis
 
-        // Get the TwoFingerPan component from the instantiated beef prefab
-        TwoFingerPan panScript = newBeef.GetComponent<TwoFingerPan>();
-        if (panScript != null)
+        GameObject newKarubi = Instantiate(karubiPrefab, spawnPosition, spawnRotation);
+        StartCoroutine(DropToGrill(newKarubi, spawnSpot.position));
+
+        grillSpotOccupied[nextGrillSpotIndex] = true;
+        beefSpotIndexMap[newKarubi] = nextGrillSpotIndex; // Map beef to grill spot index
+    }
+
+    public void SpawnSirloin()
+    {
+        int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
+
+        if (nextGrillSpotIndex == -1)
         {
-            // Assign the AR camera's transform to the cam variable in TwoFingerPan
-            panScript.cam = arCameraTransform;
+            Debug.Log("All grill spots are occupied.");
+            return;
         }
 
-        // Get the LetMeCook component from the child of the instantiated beef prefab
-        LetMeCook beefScript = newBeef.GetComponentInChildren<LetMeCook>();
+        Transform spawnSpot = grillSpots[nextGrillSpotIndex];
+        Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
+        Quaternion spawnRotation = Quaternion.Euler(0f, 90f, 0f); // Rotate 90 degrees on the Y-axis
 
-        if (beefScript != null)
+        GameObject newSirloin = Instantiate(sirloinPrefab, spawnPosition, spawnRotation);
+        StartCoroutine(DropToGrill(newSirloin, spawnSpot.position));
+
+        grillSpotOccupied[nextGrillSpotIndex] = true;
+        beefSpotIndexMap[newSirloin] = nextGrillSpotIndex; // Map beef to grill spot index
+    }
+
+    private IEnumerator DropToGrill(GameObject beef, Vector3 targetPosition)
+    {
+        float duration = 1.0f; // Duration of the drop animation
+        Vector3 startPosition = beef.transform.position;
+        float elapsedTime = 0;
+
+        while (elapsedTime < duration)
         {
-            // Log that the beefScript component was successfully obtained
-            Debug.Log("Successfully obtained LetMeCook component from newBeef.");
+            beef.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
 
-            // Assign the ARCamera to the beefScript
-            beefScript.ARCamera = ARCamera;
+        beef.transform.position = targetPosition;
+    }
 
-            // Log the ARCamera assignment
-            if (ARCamera != null)
+    public void ClearBeef()
+    {
+        GameObject[] karubiObjects = GameObject.FindGameObjectsWithTag("Karubi");
+        foreach (GameObject karubi in karubiObjects)
+        {
+            Destroy(karubi);
+        }
+
+        GameObject[] sirloinObjects = GameObject.FindGameObjectsWithTag("Sirloin");
+        foreach (GameObject sirloin in sirloinObjects)
+        {
+            Destroy(sirloin);
+        }
+
+        Debug.Log("All spawned beef (Karubi and Sirloin) has been cleared from the scene.");
+
+        // Reset the indices after clearing the beef
+        for (int i = 0; i < grillSpotOccupied.Length; i++)
+        {
+            grillSpotOccupied[i] = false;
+        }
+
+        servingSpotOccupied = false; // Reset serving spot occupied status
+        beefSpotIndexMap.Clear(); // Clear the map
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) // For mouse click or tap on screen
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                Debug.Log($"ARCamera successfully assigned to beefScript: {ARCamera.name}");
+                GameObject hitObject = hit.transform.gameObject;
+                if (hitObject.CompareTag("Karubi") || hitObject.CompareTag("Sirloin"))
+                {
+                    selectedBeef = hitObject;
+                    Debug.Log("Selected beef: " + selectedBeef.name);
+                }
             }
-            else
+        }
+
+        if (selectedBeef != null && Input.GetKeyDown(KeyCode.Space)) // Space key to move beef (for testing)
+        {
+            MoveSelectedBeef();
+        }
+    }
+
+    public void MoveSelectedBeef()
+    {
+        if (selectedBeef == null) return;
+
+        if (beefSpotIndexMap.TryGetValue(selectedBeef, out int currentSpotIndex))
+        {
+            if (selectedBeef.transform.parent == null || selectedBeef.transform.parent.CompareTag("Grill"))
             {
-                Debug.LogWarning("ARCamera is null, cannot assign to beefScript.");
+                if (!servingSpotOccupied)
+                {
+                    Transform servingSpot = servingPlateSpot;
+                    StartCoroutine(MoveBeef(selectedBeef, servingSpot.position));
+
+                    servingSpotOccupied = true; // Set serving spot to occupied
+                    grillSpotOccupied[currentSpotIndex] = false; // Clear grill spot occupied
+                    // No need to update beefSpotIndexMap since it's still on the serving plate
+                }
+                else
+                {
+                    Debug.Log("Serving plate spot is occupied.");
+                    return;
+                }
             }
+            else if (selectedBeef.transform.parent.CompareTag("ServingPlate"))
+            {
+                int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
+
+                if (nextGrillSpotIndex == -1)
+                {
+                    Debug.Log("All grill spots are occupied.");
+                    return;
+                }
+
+                Transform grillSpot = grillSpots[nextGrillSpotIndex];
+                StartCoroutine(MoveBeef(selectedBeef, grillSpot.position));
+
+                grillSpotOccupied[nextGrillSpotIndex] = true;
+                beefSpotIndexMap[selectedBeef] = nextGrillSpotIndex; // Update the map to grill spot index
+                servingSpotOccupied = false; // Clear serving spot occupied
+            }
+
+            selectedBeef = null; // Deselect the beef after moving
+        }
+    }
+
+    private IEnumerator MoveBeef(GameObject beef, Vector3 targetPosition)
+    {
+        float duration = 0.5f; // Duration of the move animation
+        Vector3 startPosition = beef.transform.position;
+        float elapsedTime = 0;
+
+        while (elapsedTime < duration)
+        {
+            beef.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        beef.transform.position = targetPosition;
+    }
+
+    private int GetNextAvailableSpot(bool[] spotOccupiedArray)
+    {
+        for (int i = 0; i < spotOccupiedArray.Length; i++)
+        {
+            if (!spotOccupiedArray[i])
+            {
+                return i;
+            }
+        }
+        return -1; // No available spots
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Karubi") || other.CompareTag("Sirloin"))
+        {
+            // Set serving spot occupied status
+            servingSpotOccupied = true;
+
+            // Optionally, you can store the reference to the beef object for further interaction.
+            plateBeef = other.gameObject;
+        }
+    }
+
+    public void ClearServingPlate()
+    {
+        if (servingSpotOccupied)
+        {
+            if (plateBeef != null)
+            {
+                // Destroy the beef object if it exists
+                Destroy(plateBeef);
+                plateBeef = null; // Clear the reference after destroying
+            }
+
+            // Reset serving spot occupied status
+            servingSpotOccupied = false;
         }
         else
         {
-            // Log a warning if the LetMeCook component could not be found
-            Debug.LogWarning("Could not find LetMeCook component on newBeef.");
-        }
-
-
-        Debug.Log("Beef spawned at: " + spawnPoint.position);
-    }
-
-    // Visualize the spawn area in the Scene view for debugging
-    private void OnDrawGizmos()
-    {
-        if (spawnCollider != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(spawnCollider.bounds.center, spawnCollider.bounds.size);
+            Debug.Log("Serving plate spot is already clear.");
         }
     }
+
 }
