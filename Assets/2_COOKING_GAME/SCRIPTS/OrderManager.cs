@@ -115,7 +115,10 @@ public class OrderManager : MonoBehaviour
             string beefTag = beefOnPlate.tag;
 
             if ((beefTag == "Karubi" && currentOrderType == BeefType.Karubi) ||
-                (beefTag == "Sirloin" && currentOrderType == BeefType.Sirloin))
+                (beefTag == "Sirloin" && currentOrderType == BeefType.Sirloin) ||
+                (beefTag == "Chuck" && currentOrderType == BeefType.Chuck) ||
+                (beefTag == "Ribeye" && currentOrderType == BeefType.Ribeye) ||
+                (beefTag == "Tongue" && currentOrderType == BeefType.Tongue))
             {
                 BeefBase beefComponent = beefOnPlate.GetComponent<BeefBase>();
                 if (beefComponent != null)
@@ -179,6 +182,9 @@ public enum BeefType
 {
     Karubi,
     Sirloin,
+    Chuck,
+    Ribeye,
+    Tongue
     // Add more beef types as needed
 }
 

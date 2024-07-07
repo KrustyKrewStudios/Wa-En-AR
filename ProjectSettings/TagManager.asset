@@ -15,6 +15,9 @@ TagManager:
   - Mesh1
   - Mesh2
   - Picker
+  - Tongue
+  - Chuck
+  - Ribeye
   layers:
   - Default
   - TransparentFX

@@ -3,7 +3,7 @@ using UnityEngine;
 public class SirloinBeef : BeefBase
 {
     public enum BeefType { Sirloin }
-    private BeefType beefType = BeefType.Sirloin;
+    //private BeefType beefType = BeefType.Sirloin;
 
     protected override void Start()
     {
