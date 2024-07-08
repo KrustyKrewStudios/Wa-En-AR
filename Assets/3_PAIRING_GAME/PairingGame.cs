@@ -8,7 +8,7 @@ public class PairingGame : MonoBehaviour
 {
     //Declaration of values
     public GameObject wheel;
-    //public GameObject beef1;
+    public GameObject beef1;
     //public string[] scriptNamesToDisable;
 
     //Spin timer
@@ -23,6 +23,7 @@ public class PairingGame : MonoBehaviour
 
     void Start()
     {
+        beef1.SetActive(false);
         //DisableScripts(beef1, scriptNamesToDisable);
     }
 
@@ -78,18 +79,29 @@ public class PairingGame : MonoBehaviour
     IEnumerator DelayedShowResult(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
+
         //Show the stored result after delay
         resultText.text = resultToShow;
+
+        //Set active objects according to result
+        if (resultToShow == "Result: 3")
+        {
+            beef1.SetActive(true);
+        }
     }
 
     public void SpinWheel()
     {
         if (!isSpinning)
         {
+            //Start spinning
             isSpinning = true;
             currentSpeed = 1000f;
             spinTimer = spinDuration;
-            resultText.text = " ";
+
+            //Reset 
+            resultText.text = "";
+            beef1.SetActive(false);
         }
 
 
