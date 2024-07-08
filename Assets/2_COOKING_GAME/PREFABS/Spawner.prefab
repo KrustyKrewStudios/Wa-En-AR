@@ -44,7 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e37dd11249ab9e4a903dd09cf3e82a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beefPrefab: {fileID: 4939409214088749646, guid: 6633423ade76d5d47a86f524510bb6cc,
-    type: 3}
-  spawnPoint: {fileID: 0}
-  spawnCollider: {fileID: 0}
+  karubiPrefab: {fileID: 0}
+  sirloinPrefab: {fileID: 0}
+  chuckPrefab: {fileID: 0}
+  ribeyePrefab: {fileID: 0}
+  tonguePrefab: {fileID: 0}
+  grillSpots: []
+  servingPlateSpot: {fileID: 0}
+  dropHeight: 2
+  raycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
