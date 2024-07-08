@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cc229d06304fb6b4f881ffcd1fb537f4, type: 2}
+  - {fileID: 2100000, guid: ebb8d4559d02a5c4c901695d1c75b324, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 8554688d58d13a140a5893776080f3a9, type: 2}
   - {fileID: 2100000, guid: cf3fa9327860bee4ca8073498a04d631, type: 2}
   - {fileID: 2100000, guid: 202bfdab306445242a06313c75df7814, type: 2}
-  baseCookingTime: 10
+  baseCookingTime: 7
   progressBarUI: {fileID: 5087275618900641883}
   progressBar: {fileID: 7081752520304285628}
 --- !u!54 &1786459164377481700
