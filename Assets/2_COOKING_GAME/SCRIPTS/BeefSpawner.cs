@@ -11,6 +11,8 @@ public class BeefSpawner : MonoBehaviour
     public GameObject ribeyePrefab;
     public GameObject tonguePrefab;
 
+    public Transform beefParent; // Parent transform for the spawned beef objects
+
 
     public Transform[] grillSpots; // Assign multiple grill spots in the inspector
     public Transform servingPlateSpot; // Single serving plate spot
@@ -52,7 +54,7 @@ public class BeefSpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
         Quaternion spawnRotation = Quaternion.Euler(90f, 90f, 0f); // Rotate 90 degrees on the X and Y axes
 
-        GameObject newKarubi = Instantiate(karubiPrefab, spawnPosition, spawnRotation);
+        GameObject newKarubi = Instantiate(karubiPrefab, spawnPosition, spawnRotation, beefParent); // Set the parent
         StartCoroutine(DropToGrill(newKarubi, spawnSpot.position));
 
         grillSpotOccupied[nextGrillSpotIndex] = true;
@@ -74,7 +76,7 @@ public class BeefSpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
         Quaternion spawnRotation = Quaternion.Euler(0f, 180f, 0f); // Rotate 90 degrees on the X-axis
 
-        GameObject newSirloin = Instantiate(sirloinPrefab, spawnPosition, spawnRotation); // Use default rotation
+        GameObject newSirloin = Instantiate(sirloinPrefab, spawnPosition, spawnRotation, beefParent); // Set the parent
         StartCoroutine(DropToGrill(newSirloin, spawnSpot.position));
 
         grillSpotOccupied[nextGrillSpotIndex] = true;
@@ -95,7 +97,7 @@ public class BeefSpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
         Quaternion spawnRotation = Quaternion.Euler(90f, 90f, 0f); // Rotate 90 degrees on the Y-axis
 
-        GameObject newRibeye = Instantiate(ribeyePrefab, spawnPosition, spawnRotation);
+        GameObject newRibeye = Instantiate(ribeyePrefab, spawnPosition, spawnRotation, beefParent); // Set the parent
         StartCoroutine(DropToGrill(newRibeye, spawnSpot.position));
 
         grillSpotOccupied[nextGrillSpotIndex] = true;
@@ -117,7 +119,7 @@ public class BeefSpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
         Quaternion spawnRotation = Quaternion.Euler(90f, 90f, 0f); // Rotate 90 degrees on the X-axis
 
-        GameObject newChuck = Instantiate(chuckPrefab, spawnPosition, spawnRotation);
+        GameObject newChuck = Instantiate(chuckPrefab, spawnPosition, spawnRotation, beefParent); // Set the parent
         StartCoroutine(DropToGrill(newChuck, spawnSpot.position));
 
         grillSpotOccupied[nextGrillSpotIndex] = true;
@@ -138,7 +140,7 @@ public class BeefSpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(spawnSpot.position.x, spawnSpot.position.y + dropHeight, spawnSpot.position.z);
         Quaternion spawnRotation = Quaternion.Euler(0f, 180f, 0f); // Rotate 180 degrees on the X-axis
 
-        GameObject newTongue = Instantiate(tonguePrefab, spawnPosition, spawnRotation);
+        GameObject newTongue = Instantiate(tonguePrefab, spawnPosition, spawnRotation, beefParent); // Set the parent
         StartCoroutine(DropToGrill(newTongue, spawnSpot.position));
 
         grillSpotOccupied[nextGrillSpotIndex] = true;

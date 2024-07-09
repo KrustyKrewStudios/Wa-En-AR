@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 4843117564500777215}
   - component: {fileID: 2655532425083770086}
   m_Layer: 7
-  m_Name: Ribeye
+  m_Name: RIbeye
   m_TagString: Ribeye
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,8 +105,8 @@ Transform:
   m_GameObject: {fileID: 1799371494578469963}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.1455, y: -0.003, z: 0.1606}
-  m_LocalScale: {x: 0.0015593381, y: 0.0015593381, z: 0.0015593381}
+  m_LocalPosition: {x: 0.1455, y: -0.0019021, z: 0.16063}
+  m_LocalScale: {x: 0.0014766464, y: 0.0014766464, z: 0.0014766464}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2810628644315343550}
