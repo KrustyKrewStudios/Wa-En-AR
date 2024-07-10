@@ -26,7 +26,7 @@ public class PairingGame : MonoBehaviour
 
     void Start()
     {
-        //beef1.SetActive(false);
+        beef1.SetActive(false);
         //beef2.SetActive(false);
         //DisableScripts(beef1, scriptNamesToDisable);
     }
@@ -121,7 +121,7 @@ public class PairingGame : MonoBehaviour
 
             //Reset 
             resultText.text = " ";
-            //beef1.SetActive(false);
+            beef1.SetActive(false);
             //beef2.SetActive(false);
         }
 

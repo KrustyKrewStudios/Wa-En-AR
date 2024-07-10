@@ -18,8 +18,12 @@ TagManager:
   - Tongue
   - Chuck
   - Ribeye
-  - Beef1
-  - Drink1
+  - ShortRib
+  - BeefTongue
+  - Campfire
+  - Martini
+  - Sake
+  - Rose
   layers:
   - Default
   - TransparentFX
