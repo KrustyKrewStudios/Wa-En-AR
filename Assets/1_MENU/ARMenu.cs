@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ARMenu : MonoBehaviour
 {
+    public GameObject arCanvas;
+
     // Start is called before the first frame update
     void Start()
     {
