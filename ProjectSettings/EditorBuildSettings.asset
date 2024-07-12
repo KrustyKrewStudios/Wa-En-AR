@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/2_COOKING_GAME/nimama.unity
-    guid: 15a81fd8656800949a76ba04c460f894
+    path: Assets/2_COOKING_GAME/last warning web ar.unity
+    guid: d240228eff59719459c52f5b1980f7e8
   m_configObjects: {}
