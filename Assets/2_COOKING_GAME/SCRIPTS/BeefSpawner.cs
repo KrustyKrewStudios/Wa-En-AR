@@ -235,14 +235,22 @@ public class BeefSpawner : MonoBehaviour
     private void HandleInput(Vector2 screenPosition)
     {
         Debug.Log("Handling input at screen position: " + screenPosition);
+
+        if (Camera.main == null)
+        {
+            Debug.LogError("Main camera is not found. Ensure the camera has the 'MainCamera' tag.");
+            return;
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
         RaycastHit hit;
+
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask)) // Use the LayerMask in the Raycast
         {
             GameObject hitObject = hit.transform.gameObject;
             Debug.Log("Raycast hit object: " + hitObject.name);
 
-            if (hitObject.CompareTag("Karubi") || hitObject.CompareTag("Sirloin"))
+            if (hitObject.CompareTag("Karubi") || hitObject.CompareTag("Sirloin") || hitObject.CompareTag("Chuck") || hitObject.CompareTag("Ribeye") || hitObject.CompareTag("Tongue"))
             {
                 selectedBeef = hitObject;
                 Debug.Log("Selected beef: " + selectedBeef.name);
@@ -253,6 +261,10 @@ public class BeefSpawner : MonoBehaviour
                 if (selectedBeef != null)
                 {
                     MoveSelectedBeef();
+                }
+                else
+                {
+                    Debug.LogWarning("No beef selected to move to the serving plate.");
                 }
             }
         }
@@ -268,7 +280,7 @@ public class BeefSpawner : MonoBehaviour
 
         if (beefSpotIndexMap.TryGetValue(selectedBeef, out int currentSpotIndex))
         {
-            if (selectedBeef.transform.parent == null || selectedBeef.transform.parent.CompareTag("Grill"))
+            if (selectedBeef.transform.parent == beefParent || selectedBeef.transform.parent == null) // Ensure parent is beefParent
             {
                 if (!servingSpotOccupied)
                 {
@@ -277,7 +289,7 @@ public class BeefSpawner : MonoBehaviour
 
                     servingSpotOccupied = true; // Set serving spot to occupied
                     grillSpotOccupied[currentSpotIndex] = false; // Clear grill spot occupied
-                    // No need to update beefSpotIndexMap since it's still on the serving plate
+                    beefSpotIndexMap[selectedBeef] = -1; // Update map to indicate it's on the serving plate
                 }
                 else
                 {
@@ -285,7 +297,7 @@ public class BeefSpawner : MonoBehaviour
                     return;
                 }
             }
-            else if (selectedBeef.transform.parent.CompareTag("ServingPlate"))
+            else if (selectedBeef.transform.parent == beefParent) // Ensure parent is beefParent
             {
                 int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
 
@@ -306,6 +318,7 @@ public class BeefSpawner : MonoBehaviour
             selectedBeef = null; // Deselect the beef after moving
         }
     }
+
 
     private IEnumerator MoveBeef(GameObject beef, Vector3 targetPosition)
     {
