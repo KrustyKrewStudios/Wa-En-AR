@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/2_COOKING_GAME/plz werk i beg.unity
-    guid: dd346397dab84f244aad559175b9ae57
+    path: Assets/2_COOKING_GAME/nimama.unity
+    guid: 15a81fd8656800949a76ba04c460f894
   m_configObjects: {}
