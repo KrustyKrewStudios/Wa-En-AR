@@ -104,7 +104,7 @@ public class OrderManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Order checked: Incorrect temperature!");
+                        Debug.Log("Incorrect temperature!");
                         StartCoroutine(ShowMessageAndRevert("Order Checked: Incorrect temperature!"));
                     }
                 }
@@ -116,7 +116,7 @@ public class OrderManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Order checked: Incorrect type!");
+                Debug.Log("Incorrect beef type!");
                 StartCoroutine(ShowMessageAndRevert("Order Checked: Incorrect type!"));
             }
         }
