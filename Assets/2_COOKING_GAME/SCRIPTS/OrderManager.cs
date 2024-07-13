@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using static BeefBase;
 using System.Collections;
 
 public class OrderManager : MonoBehaviour
@@ -19,45 +18,34 @@ public class OrderManager : MonoBehaviour
 
     private void Start()
     {
-
-
         StartMinigame();
     }
 
     public void StartMinigame()
     {
-        SetOrder1(); // Start with the first order
+        SetNextOrder(); // Start with the first order
     }
 
     // Function to set order 1 (medium Karubi)
-    public void SetOrder1()
+    private void SetNextOrder()
     {
-        currentOrderType = BeefType.Karubi;
-        currentOrderState = BeefBase.BeefState.Medium;
-        UpdateOrderText("Medium Karubi");
-        Debug.Log("order 1 medium karubi");
+        currentOrderType = GetRandomBeefType();
+        currentOrderState = GetRandomBeefState();
+        UpdateOrderText($"{currentOrderState} {currentOrderType}");
+        Debug.Log($"New Order: {currentOrderState} {currentOrderType}");
     }
 
-    // Function to set order 2 (well-done Sirloin)
-    public void SetOrder2()
+    private BeefType GetRandomBeefType()
     {
-        currentOrderType = BeefType.Sirloin;
-        currentOrderState = BeefBase.BeefState.WellDone;
-        UpdateOrderText("Well-done Sirloin");
-        Debug.Log("order 2 well sirloin ");
-
+        BeefType[] beefTypes = { BeefType.Karubi, BeefType.Sirloin, BeefType.Chuck, BeefType.Ribeye, BeefType.Tongue };
+        return beefTypes[Random.Range(0, beefTypes.Length)];
     }
 
-    // Function to set order 3 (rare Karubi)
-    public void SetOrder3()
+    private BeefBase.BeefState GetRandomBeefState()
     {
-        currentOrderType = BeefType.Karubi;
-        currentOrderState = BeefBase.BeefState.Rare;
-        UpdateOrderText("Rare Karubi");
-        Debug.Log("order 3 rare karubi");
-
+        BeefBase.BeefState[] beefStates = { BeefBase.BeefState.Rare, BeefBase.BeefState.Medium, BeefBase.BeefState.WellDone };
+        return beefStates[Random.Range(0, beefStates.Length)];
     }
-
     // Function to update the order text
     private void UpdateOrderText(string orderDescription)
     {
@@ -65,24 +53,7 @@ public class OrderManager : MonoBehaviour
         Debug.Log("Current Order: " + orderDescription);
     }
 
-    // Function to set the next order based on the current order index
-    private void SetNextOrder()
-    {
-        currentOrderIndex = (currentOrderIndex + 1) % 3; // Cycle through 0, 1, 2
 
-        switch (currentOrderIndex)
-        {
-            case 0:
-                SetOrder1();
-                break;
-            case 1:
-                SetOrder2();
-                break;
-            case 2:
-                SetOrder3();
-                break;
-        }
-    }
 
     public void SelectBeef(GameObject beefObject)
     {
@@ -103,7 +74,7 @@ public class OrderManager : MonoBehaviour
         else
         {
             Debug.Log("No beef on the plate to check.");
-            orderText.text = "No beef on the plate to check.";
+            StartCoroutine(ShowMessageAndRevert("No beef on the plate to check."));
         }
     }
 
@@ -129,36 +100,36 @@ public class OrderManager : MonoBehaviour
                     {
                         Debug.Log("Order checked: Correct!");
                         orderText.text = "Order Checked: Correct!";
-                        StartCoroutine(RemoveBeefAfterDelay(beefOnPlate)); // Start coroutine to remove beef
+                        StartCoroutine(HandleCorrectOrder(beefOnPlate)); // Start coroutine to handle correct order
                     }
                     else
                     {
-                        Debug.Log("Order checked: Incorrect temperature!");
-                        orderText.text = "Order Checked: Incorrect temperature!";
+                        Debug.Log("Incorrect temperature!");
+                        StartCoroutine(ShowMessageAndRevert("Order Checked: Incorrect temperature!"));
                     }
                 }
                 else
                 {
                     Debug.Log("Selected object is not a valid beef.");
-                    orderText.text = "Selected object is not a valid beef.";
+                    StartCoroutine(ShowMessageAndRevert("Selected object is not a valid beef."));
                 }
             }
             else
             {
-                Debug.Log("Order checked: Incorrect type!");
-                orderText.text = "Order Checked: Incorrect type!";
+                Debug.Log("Incorrect beef type!");
+                StartCoroutine(ShowMessageAndRevert("Order Checked: Incorrect type!"));
             }
         }
         else
         {
             Debug.Log("No beef selected to check order.");
-            orderText.text = "No beef selected to check order.";
+            StartCoroutine(ShowMessageAndRevert("No beef selected to check order."));
         }
     }
 
-    private IEnumerator RemoveBeefAfterDelay(GameObject beef)
+    private IEnumerator HandleCorrectOrder(GameObject beef)
     {
-        yield return new WaitForSeconds(1.0f); // Wait for 1 second before removing the beef
+        yield return new WaitForSeconds(1.5f); // Wait for 1.5 seconds before proceeding
 
         float duration = 0.5f; // Duration of the scale-down animation
         Vector3 startScale = beef.transform.localScale;
@@ -174,7 +145,30 @@ public class OrderManager : MonoBehaviour
 
         beef.transform.localScale = endScale;
         Destroy(beef); // Remove the beef object from the scene
+        beefSpawner.plateOccupied = false;
         SetNextOrder(); // Set the next order after the beef is removed
+    }
+
+    private IEnumerator ShowMessageAndRevert(string message)
+    {
+        orderText.text = message;
+        yield return new WaitForSeconds(3.0f); // Wait for 3 seconds
+        UpdateOrderText(GetCurrentOrderDescription()); // Revert to showing the current order
+    }
+
+    private string GetCurrentOrderDescription()
+    {
+        switch (currentOrderIndex)
+        {
+            case 0:
+                return "Medium Karubi";
+            case 1:
+                return "Well-done Sirloin";
+            case 2:
+                return "Rare Karubi";
+            default:
+                return "";
+        }
     }
 }
 

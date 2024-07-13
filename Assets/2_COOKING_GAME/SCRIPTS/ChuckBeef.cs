@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ChuckBeef : BeefBase
 {
-    public enum BeefType { Karubi }
+    public enum BeefType { Chuck }
     //private BeefType beefType = BeefType.Karubi;
 
     protected override void Start()
