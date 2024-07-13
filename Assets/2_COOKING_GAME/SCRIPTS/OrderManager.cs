@@ -23,36 +23,29 @@ public class OrderManager : MonoBehaviour
 
     public void StartMinigame()
     {
-        SetOrder1(); // Start with the first order
+        SetNextOrder(); // Start with the first order
     }
 
     // Function to set order 1 (medium Karubi)
-    public void SetOrder1()
+    private void SetNextOrder()
     {
-        currentOrderType = BeefType.Karubi;
-        currentOrderState = BeefBase.BeefState.Medium;
-        UpdateOrderText("Medium Karubi");
-        Debug.Log("order 1 medium karubi");
+        currentOrderType = GetRandomBeefType();
+        currentOrderState = GetRandomBeefState();
+        UpdateOrderText($"{currentOrderState} {currentOrderType}");
+        Debug.Log($"New Order: {currentOrderState} {currentOrderType}");
     }
 
-    // Function to set order 2 (well-done Sirloin)
-    public void SetOrder2()
+    private BeefType GetRandomBeefType()
     {
-        currentOrderType = BeefType.Sirloin;
-        currentOrderState = BeefBase.BeefState.WellDone;
-        UpdateOrderText("Well-done Sirloin");
-        Debug.Log("order 2 well sirloin ");
+        BeefType[] beefTypes = { BeefType.Karubi, BeefType.Sirloin, BeefType.Chuck, BeefType.Ribeye, BeefType.Tongue };
+        return beefTypes[Random.Range(0, beefTypes.Length)];
     }
 
-    // Function to set order 3 (rare Karubi)
-    public void SetOrder3()
+    private BeefBase.BeefState GetRandomBeefState()
     {
-        currentOrderType = BeefType.Karubi;
-        currentOrderState = BeefBase.BeefState.Rare;
-        UpdateOrderText("Rare Karubi");
-        Debug.Log("order 3 rare karubi");
+        BeefBase.BeefState[] beefStates = { BeefBase.BeefState.Rare, BeefBase.BeefState.Medium, BeefBase.BeefState.WellDone };
+        return beefStates[Random.Range(0, beefStates.Length)];
     }
-
     // Function to update the order text
     private void UpdateOrderText(string orderDescription)
     {
@@ -60,24 +53,7 @@ public class OrderManager : MonoBehaviour
         Debug.Log("Current Order: " + orderDescription);
     }
 
-    // Function to set the next order based on the current order index
-    private void SetNextOrder()
-    {
-        currentOrderIndex = (currentOrderIndex + 1) % 3; // Cycle through 0, 1, 2
 
-        switch (currentOrderIndex)
-        {
-            case 0:
-                SetOrder1();
-                break;
-            case 1:
-                SetOrder2();
-                break;
-            case 2:
-                SetOrder3();
-                break;
-        }
-    }
 
     public void SelectBeef(GameObject beefObject)
     {
@@ -153,7 +129,7 @@ public class OrderManager : MonoBehaviour
 
     private IEnumerator HandleCorrectOrder(GameObject beef)
     {
-        yield return new WaitForSeconds(3.0f); // Wait for 3 seconds before proceeding
+        yield return new WaitForSeconds(1.5f); // Wait for 1.5 seconds before proceeding
 
         float duration = 0.5f; // Duration of the scale-down animation
         Vector3 startScale = beef.transform.localScale;
@@ -169,6 +145,7 @@ public class OrderManager : MonoBehaviour
 
         beef.transform.localScale = endScale;
         Destroy(beef); // Remove the beef object from the scene
+        beefSpawner.plateOccupied = false;
         SetNextOrder(); // Set the next order after the beef is removed
     }
 

@@ -22,7 +22,7 @@ public class BeefSpawner : MonoBehaviour
     private GameObject selectedBeef; // Currently selected beef
 
     private bool[] grillSpotOccupied;
-    private bool servingSpotOccupied = false; // Track if serving plate spot is occupied
+    public bool plateOccupied = false; // Track if serving plate spot is occupied
     private GameObject plateBeef; // Store the reference to the beef object
 
     private Dictionary<GameObject, int> beefSpotIndexMap; // Maps beef objects to their spot indices
@@ -207,7 +207,7 @@ public class BeefSpawner : MonoBehaviour
             grillSpotOccupied[i] = false;
         }
 
-        servingSpotOccupied = false; // Reset serving spot occupied status
+        plateOccupied = false; // Reset serving spot occupied status
         beefSpotIndexMap.Clear(); // Clear the map
     }
 
@@ -282,12 +282,12 @@ public class BeefSpawner : MonoBehaviour
         {
             if (selectedBeef.transform.parent == beefParent || selectedBeef.transform.parent == null) // Ensure parent is beefParent
             {
-                if (!servingSpotOccupied)
+                if (!plateOccupied)
                 {
                     Transform servingSpot = servingPlateSpot;
                     StartCoroutine(MoveBeef(selectedBeef, servingSpot.position));
 
-                    servingSpotOccupied = true; // Set serving spot to occupied
+                    plateOccupied = true; // Set serving spot to occupied
                     grillSpotOccupied[currentSpotIndex] = false; // Clear grill spot occupied
                     beefSpotIndexMap[selectedBeef] = -1; // Update map to indicate it's on the serving plate
                 }
@@ -312,7 +312,7 @@ public class BeefSpawner : MonoBehaviour
 
                 grillSpotOccupied[nextGrillSpotIndex] = true;
                 beefSpotIndexMap[selectedBeef] = nextGrillSpotIndex; // Update the map to grill spot index
-                servingSpotOccupied = false; // Clear serving spot occupied
+                plateOccupied = false; // Clear serving spot occupied
             }
 
             selectedBeef = null; // Deselect the beef after moving
@@ -353,7 +353,7 @@ public class BeefSpawner : MonoBehaviour
         if (other.CompareTag("Karubi") || other.CompareTag("Sirloin") || other.CompareTag("Chuck") || other.CompareTag("Ribeye") || other.CompareTag("Tongue"))
         {
             // Set serving spot occupied status
-            servingSpotOccupied = true;
+            plateOccupied = true;
 
             // Store the reference to the beef object for further interaction.
             plateBeef = other.gameObject;
@@ -367,7 +367,7 @@ public class BeefSpawner : MonoBehaviour
         {
             plateBeef = null;
             Debug.Log("Beef removed from plate.");
-            servingSpotOccupied = false;
+            plateOccupied = false;
         }
     }
 
@@ -378,7 +378,7 @@ public class BeefSpawner : MonoBehaviour
 
     public void ClearServingPlate()
     {
-        if (servingSpotOccupied)
+        if (plateOccupied)
         {
             if (plateBeef != null)
             {
@@ -388,7 +388,7 @@ public class BeefSpawner : MonoBehaviour
             }
 
             // Reset serving spot occupied status
-            servingSpotOccupied = false;
+            plateOccupied = false;
         }
         else
         {
