@@ -11,6 +11,8 @@ public class BeefSpawner : MonoBehaviour
     public GameObject ribeyePrefab;
     public GameObject tonguePrefab;
 
+    public OrderManager orderManager;
+
     public Transform beefParent; // Parent transform for the spawned beef objects
 
 
