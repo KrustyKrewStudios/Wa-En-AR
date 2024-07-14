@@ -12,7 +12,12 @@ public class OrderManager : MonoBehaviour
     private BeefType currentOrderType = BeefType.Karubi; // Default to Karubi for the first order
     private BeefBase.BeefState currentOrderState = BeefBase.BeefState.Medium; // Default to Medium for Karubi
 
-    private int currentOrderIndex = 0; // Index to keep track of the current order
+
+    public TMP_Text orderTrackerText; // Reference to the TextMeshProUGUI for displaying the order tracker (e.g., "Order 1/5")
+
+    private int correctOrdersServed = 0; // Counter for the correct orders served
+    private int totalOrdersToServe = 5; // Total orders to serve to win the game
+
 
     public BeefSpawner beefSpawner; // Reference to the BeefSpawner script
 
@@ -23,15 +28,16 @@ public class OrderManager : MonoBehaviour
 
     public void StartMinigame()
     {
+        correctOrdersServed = 0; // Reset the counter at the start of the game
         SetNextOrder(); // Start with the first order
     }
 
-    // Function to set order 1 (medium Karubi)
     private void SetNextOrder()
     {
         currentOrderType = GetRandomBeefType();
         currentOrderState = GetRandomBeefState();
         UpdateOrderText($"{currentOrderState} {currentOrderType}");
+        UpdateOrderTrackerText();
         Debug.Log($"New Order: {currentOrderState} {currentOrderType}");
     }
 
@@ -46,6 +52,8 @@ public class OrderManager : MonoBehaviour
         BeefBase.BeefState[] beefStates = { BeefBase.BeefState.Rare, BeefBase.BeefState.Medium, BeefBase.BeefState.WellDone };
         return beefStates[Random.Range(0, beefStates.Length)];
     }
+
+
     // Function to update the order text
     private void UpdateOrderText(string orderDescription)
     {
@@ -53,6 +61,12 @@ public class OrderManager : MonoBehaviour
         Debug.Log("Current Order: " + orderDescription);
     }
 
+    // Function to update the order tracker text
+    private void UpdateOrderTrackerText()
+    {
+        orderTrackerText.text = $"Order {correctOrdersServed + 1}/{totalOrdersToServe}";
+        Debug.Log($"Order {correctOrdersServed + 1}/{totalOrdersToServe}");
+    }
 
 
     public void SelectBeef(GameObject beefObject)
@@ -74,7 +88,6 @@ public class OrderManager : MonoBehaviour
         else
         {
             Debug.Log("No beef on the plate to check.");
-            StartCoroutine(ShowMessageAndRevert("No beef on the plate to check."));
         }
     }
 
@@ -82,50 +95,42 @@ public class OrderManager : MonoBehaviour
     {
         if (beefOnPlate != null)
         {
-            // Check if the beef matches the current order type
             string beefTag = beefOnPlate.tag;
+            bool typeCorrect = beefTag == currentOrderType.ToString();
+            BeefBase beefComponent = beefOnPlate.GetComponent<BeefBase>();
 
-            if ((beefTag == "Karubi" && currentOrderType == BeefType.Karubi) ||
-                (beefTag == "Sirloin" && currentOrderType == BeefType.Sirloin) ||
-                (beefTag == "Chuck" && currentOrderType == BeefType.Chuck) ||
-                (beefTag == "Ribeye" && currentOrderType == BeefType.Ribeye) ||
-                (beefTag == "Tongue" && currentOrderType == BeefType.Tongue))
+            if (beefComponent != null)
             {
-                BeefBase beefComponent = beefOnPlate.GetComponent<BeefBase>();
-                if (beefComponent != null)
-                {
-                    BeefBase.BeefState selectedState = beefComponent.GetCurrentState();
+                BeefBase.BeefState selectedState = beefComponent.GetCurrentState();
+                bool stateCorrect = selectedState == currentOrderState;
 
-                    if (selectedState == currentOrderState)
-                    {
-                        Debug.Log("Order checked: Correct!");
-                        orderText.text = "Order Checked: Correct!";
-                        StartCoroutine(HandleCorrectOrder(beefOnPlate)); // Start coroutine to handle correct order
-                    }
-                    else
-                    {
-                        Debug.Log("Incorrect temperature!");
-                        StartCoroutine(ShowMessageAndRevert("Order Checked: Incorrect temperature!"));
-                    }
+                if (typeCorrect && stateCorrect)
+                {
+                    Debug.Log("Order checked: Correct!");
+                    orderText.text = "Order Served!";
+                    StartCoroutine(HandleCorrectOrder(beefOnPlate));
                 }
                 else
                 {
-                    Debug.Log("Selected object is not a valid beef.");
-                    StartCoroutine(ShowMessageAndRevert("Selected object is not a valid beef."));
+                    string feedback = "Order Incorrect: ";
+                    if (!typeCorrect) feedback += "Wrong Beef Type ";
+                    if (!stateCorrect) feedback += "Wrong Temperature ";
+                    orderText.text = feedback.Trim();
+
+                    StartCoroutine(ResetOrderTextAfterDelay(3f, $"{currentOrderState} {currentOrderType}"));
                 }
             }
             else
             {
-                Debug.Log("Incorrect beef type!");
-                StartCoroutine(ShowMessageAndRevert("Order Checked: Incorrect type!"));
+                Debug.Log("Selected object is not a valid beef.");
             }
         }
         else
         {
             Debug.Log("No beef selected to check order.");
-            StartCoroutine(ShowMessageAndRevert("No beef selected to check order."));
         }
     }
+
 
     private IEnumerator HandleCorrectOrder(GameObject beef)
     {
@@ -146,31 +151,34 @@ public class OrderManager : MonoBehaviour
         beef.transform.localScale = endScale;
         Destroy(beef); // Remove the beef object from the scene
         beefSpawner.plateOccupied = false;
-        SetNextOrder(); // Set the next order after the beef is removed
-    }
 
-    private IEnumerator ShowMessageAndRevert(string message)
-    {
-        orderText.text = message;
-        yield return new WaitForSeconds(3.0f); // Wait for 3 seconds
-        UpdateOrderText(GetCurrentOrderDescription()); // Revert to showing the current order
-    }
+        correctOrdersServed++;
 
-    private string GetCurrentOrderDescription()
-    {
-        switch (currentOrderIndex)
+        if (correctOrdersServed >= totalOrdersToServe)
         {
-            case 0:
-                return "Medium Karubi";
-            case 1:
-                return "Well-done Sirloin";
-            case 2:
-                return "Rare Karubi";
-            default:
-                return "";
+            EndGame(); // End the game if the required number of orders is served
         }
+        else
+        {
+            SetNextOrder(); // Set the next order after the beef is removed
+        } 
     }
+
+    public void EndGame()
+        {
+            orderText.text = "Congratulations! You served all orders correctly!";
+            Debug.Log("good job dumbass");
+        }
+    private IEnumerator ResetOrderTextAfterDelay(float delay, string newOrder)
+    {
+        yield return new WaitForSeconds(delay);
+        UpdateOrderText(newOrder);
+    }
+
+
 }
+
+
 
 public enum BeefType
 {
