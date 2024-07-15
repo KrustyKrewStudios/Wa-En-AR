@@ -8,8 +8,11 @@ public class PairingGame : MonoBehaviour
 {
     //Declaration of values
     public GameObject wheel;
-    public GameObject beef1;
-    public GameObject beef2;
+    public GameObject chuck;
+    public GameObject karubi;
+    public GameObject ribeye;
+    public GameObject sirloin;
+    public GameObject tongue;
     //public GameObject drink1;
     //public string[] scriptNamesToDisable;
 
@@ -26,8 +29,11 @@ public class PairingGame : MonoBehaviour
 
     void Start()
     {
-        beef1.SetActive(false);
-        beef2.SetActive(false);
+        chuck.SetActive(false);
+        karubi.SetActive(false);
+        ribeye.SetActive(false);
+        sirloin.SetActive(false);
+        tongue.SetActive(false);
         //DisableScripts(beef1, scriptNamesToDisable);
     }
 
@@ -61,7 +67,7 @@ public class PairingGame : MonoBehaviour
             //Decrement the spin timer
             spinTimer -= Time.deltaTime;
 
-            Debug.Log("Rotating");
+            //Debug.Log("Rotating");
             //Debug.Log(spinDuration);
             //Debug.Log(spinTimer);
 
@@ -72,7 +78,7 @@ public class PairingGame : MonoBehaviour
                 currentSpeed = 0f;
                 //Start coroutine to delay showing result
                 StartCoroutine(DelayedShowResult(1f));
-                Debug.Log("Start coroutine");
+                //Debug.Log("Start coroutine");
             }
             else
             {
@@ -84,7 +90,7 @@ public class PairingGame : MonoBehaviour
                     currentSpeed = 0f;
                     //Start coroutine to delay showing result
                     StartCoroutine(DelayedShowResult(1f));
-                    Debug.Log("Start coroutine");
+                    //Debug.Log("Start coroutine");
                 }
             }
         }
@@ -99,13 +105,25 @@ public class PairingGame : MonoBehaviour
         Debug.Log(resultToShow);
 
         //Set active objects according to result
-        if (resultToShow == "Result: Beef")
+        if (resultToShow == "Ribeye")
         {
-            beef1.SetActive(true);
+            ribeye.SetActive(true);
         }
-        if (resultToShow == "Result: 5")
+        if (resultToShow == "Chuck")
         {
-            beef2.SetActive(true);
+            chuck.SetActive(true);
+        }
+        if (resultToShow == "Sirloin")
+        {
+            sirloin.SetActive(true);
+        }
+        if (resultToShow == "Karubi")
+        {
+            karubi.SetActive(true);
+        }
+        if (resultToShow == "Beef Tongue")
+        {
+            tongue.SetActive(true);
         }
     }
 
@@ -117,12 +135,15 @@ public class PairingGame : MonoBehaviour
             isSpinning = true;
             currentSpeed = 1000f;
             spinTimer = spinDuration;
-            Debug.Log("Spinning");
+            //Debug.Log("Spinning");
 
             //Reset 
             resultText.text = " ";
-            beef1.SetActive(false);
-            beef2.SetActive(false);
+            chuck.SetActive(false);
+            karubi.SetActive(false);
+            ribeye.SetActive(false);
+            sirloin.SetActive(false);
+            tongue.SetActive(false);
         }
 
 
@@ -130,17 +151,16 @@ public class PairingGame : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTrigger");
+        //Debug.Log("OnTrigger");
 
         //Only update resultToShow if the wheel is still spinning
         if (isSpinning) 
         {
-            Debug.Log("OnTrigger - Unchecked");
+            //Debug.Log("OnTrigger - Unchecked");
 
             if (other.CompareTag("Mesh3"))
             {
                 resultToShow = "Ribeye";
-                Debug.Log("Mesh3");
             }
             else if (other.CompareTag("Mesh4"))
             {
@@ -149,7 +169,6 @@ public class PairingGame : MonoBehaviour
             else if (other.CompareTag("Mesh5"))
             {
                 resultToShow = "Chuck";
-                Debug.Log("Mesh5");
             }
             else if (other.CompareTag("Mesh1"))
             {
@@ -162,7 +181,7 @@ public class PairingGame : MonoBehaviour
             else
             {
                 resultToShow = "Result: Nil";
-                Debug.Log("Nil");
+                //Debug.Log("Nil");
             }
         }
     }
