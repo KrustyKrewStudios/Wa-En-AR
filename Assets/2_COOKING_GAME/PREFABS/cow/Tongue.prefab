@@ -26,14 +26,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1647981690510582028}
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.3}
   m_LocalScale: {x: 0.7339828, y: 2.1856651, z: 1.0453796}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8731436535799505594}
   m_Father: {fileID: 5374461558186596518}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 9.1, y: 389.07858}
@@ -208,8 +208,8 @@ Transform:
   m_GameObject: {fileID: 4284273995445352346}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.045853, y: -0.02543, z: 0.06474}
-  m_LocalScale: {x: 0.0016434382, y: 0.00015326517, z: 0.0014273069}
+  m_LocalPosition: {x: -0.04582, y: -0.023897, z: 0.063962}
+  m_LocalScale: {x: 0.0015562867, y: 0.00014513751, z: 0.0013516168}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3596545198641704143}
@@ -330,7 +330,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
