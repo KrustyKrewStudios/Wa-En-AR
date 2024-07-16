@@ -7,9 +7,20 @@ using TMPro;
 public class MatchingResults : MonoBehaviour
 {
     //Declarations
-    public GameObject drinkTest;
-
     public TMP_Text ratingText;
+    public GameObject ratingPanel;
+
+    //Drinks declraration
+    public Transform spawnPoint;
+    public Transform oldFashionedSpawnPoint;
+    public GameObject campfire;
+    public GameObject martini;
+    public GameObject sake;
+    public GameObject oldFashioned;
+
+    //Counter for button clicks
+    private int clickCounter = 0;
+    public GameObject endPagePanel;
 
     private HashSet<string> detectedItems = new HashSet<string>();
 
@@ -19,11 +30,6 @@ public class MatchingResults : MonoBehaviour
 
     //Dictionary to store ratings for each combination
     private Dictionary<string, int> comboRatings = new Dictionary<string, int>();
-
-    public void ActiveSet()
-    {
-        drinkTest.gameObject.SetActive(true);
-    }
 
     void Start()
     {
@@ -52,6 +58,38 @@ public class MatchingResults : MonoBehaviour
         //Debug.Log("Combo Initialied");
     }
 
+    public void SpawnCampfire()
+    {
+        if (campfire != null && spawnPoint != null)
+        {
+            Instantiate(campfire, spawnPoint.position, spawnPoint.rotation);
+        }
+    }
+
+    public void SpawnSake()
+    {
+        if (sake != null && spawnPoint != null)
+        {
+            Instantiate(sake, spawnPoint.position, spawnPoint.rotation);
+        }
+    }
+
+    public void SpawnMartini()
+    {
+        if (martini != null && spawnPoint != null)
+        {
+            Instantiate(martini, spawnPoint.position, spawnPoint.rotation);
+        }
+    }
+
+    public void SpawnOldFashioned()
+    {
+        if (oldFashioned != null && oldFashionedSpawnPoint != null)
+        {
+            Instantiate(oldFashioned, oldFashionedSpawnPoint.position, oldFashionedSpawnPoint.rotation);
+        }
+    }
+
     //Detect items via OnTrigger & Tags
     void OnTriggerEnter(Collider other)
     {
@@ -77,12 +115,9 @@ public class MatchingResults : MonoBehaviour
         //Check for which beef
         foreach (string beef in beefItems)
         {
-            //Debug.Log("Checking beef: " + beef);
-
             //Check for which drink
             foreach (string drink in drinkItems)
             {
-                //Debug.Log("Checking drink: " + drink);
                 if (detectedItems.Contains(beef) && detectedItems.Contains(drink))
                 {
                     //Call for func for rating items 
@@ -96,22 +131,18 @@ public class MatchingResults : MonoBehaviour
     {
         List<string> itemsToDeactivate = new();
 
-        //Check for which beef
         foreach (string beef in beefItems)
         {
-            //Check for which drink
             foreach (string drink in drinkItems)
             {
                 if (detectedItems.Contains(beef) && detectedItems.Contains(drink))
                 {
-                    //Set inactive
                     itemsToDeactivate.Add(beef);
                     itemsToDeactivate.Add(drink);
                 }
             }
         }
 
-        //Remove from list of detected items
         foreach (string item in itemsToDeactivate)
         {
             GameObject[] itemObjects = GameObject.FindGameObjectsWithTag(item);
@@ -119,7 +150,6 @@ public class MatchingResults : MonoBehaviour
             {
                 itemObject.SetActive(false);
             }
-            detectedItems.Remove(item);
         }
     }
 
@@ -131,14 +161,18 @@ public class MatchingResults : MonoBehaviour
         {
 
             //Convert to string 
-            string ratingString = $"Rating for pairing {beef} with {drink}: {rating}";
+            string ratingString = $"Rating for pairing is {rating}";
 
             //Debug.Log($"Rating for pairing {beef} with {drink}: {rating}");
 
             if (ratingText != null)
             {
+                ratingPanel.SetActive(true);
+
                 //Add to TMP_text
                 ratingText.text = ratingString;
+
+                ClickCounter();
             }
         }
         else
@@ -147,8 +181,20 @@ public class MatchingResults : MonoBehaviour
 
             if (ratingText != null)
             {
+                ratingPanel.SetActive(true);
                 ratingText.text = ratingString;
             }
         }
     }
+
+    public void ClickCounter()
+    {
+        clickCounter++;
+        if (clickCounter == 5)
+        {
+            endPagePanel.gameObject.SetActive(true);
+            clickCounter = 0;
+        }
+    }
+
 }

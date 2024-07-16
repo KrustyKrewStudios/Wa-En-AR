@@ -13,18 +13,15 @@ public class PairingGame : MonoBehaviour
     public GameObject ribeye;
     public GameObject sirloin;
     public GameObject tongue;
-    //public GameObject drink1;
-    //public string[] scriptNamesToDisable;
-
+    public GameObject resultPanel;
 
     //Spin timer
-    public float spinDuration = 5f;
     private bool isSpinning = false;
     private float currentSpeed;
     private float spinTimer;
 
     //Results
-    private string resultToShow = " "; 
+    private string resultToShow = " ";
     public TMP_Text resultText;
 
     void Start()
@@ -34,24 +31,7 @@ public class PairingGame : MonoBehaviour
         ribeye.SetActive(false);
         sirloin.SetActive(false);
         tongue.SetActive(false);
-        //DisableScripts(beef1, scriptNamesToDisable);
     }
-
-    /*void DisableScripts(GameObject gameObject, string[] scriptNames)
-    {
-        foreach (string scriptName in scriptNames)
-        {
-            gameObject.SendMessage("SetScriptDisabled", SendMessageOptions.DontRequireReceiver);
-        }
-    }
-
-    void EnableScripts(GameObject gameObject, string[] scriptNames)
-    {
-        foreach (string scriptName in scriptNames)
-        {
-            gameObject.SendMessage("SetScriptEnabled", SendMessageOptions.DontRequireReceiver);
-        }
-    }*/
 
     void Update()
     {
@@ -76,6 +56,7 @@ public class PairingGame : MonoBehaviour
             {
                 isSpinning = false;
                 currentSpeed = 0f;
+
                 //Start coroutine to delay showing result
                 StartCoroutine(DelayedShowResult(1f));
                 //Debug.Log("Start coroutine");
@@ -84,10 +65,12 @@ public class PairingGame : MonoBehaviour
             {
                 //Deceleration
                 currentSpeed -= 100f * Time.deltaTime;
+
                 if (currentSpeed <= 0f)
                 {
                     isSpinning = false;
                     currentSpeed = 0f;
+
                     //Start coroutine to delay showing result
                     StartCoroutine(DelayedShowResult(1f));
                     //Debug.Log("Start coroutine");
@@ -101,7 +84,8 @@ public class PairingGame : MonoBehaviour
         yield return new WaitForSeconds(delayTime);
 
         //Show the stored result after delay
-        resultText.text = resultToShow;
+        resultPanel.SetActive(true);
+        resultText.text = "You got " + resultToShow;
         Debug.Log(resultToShow);
 
         //Set active objects according to result
@@ -134,10 +118,13 @@ public class PairingGame : MonoBehaviour
             //Start spinning
             isSpinning = true;
             currentSpeed = 1000f;
-            spinTimer = spinDuration;
-            //Debug.Log("Spinning");
 
-            //Reset 
+            //Set random time for spinning
+            spinTimer = Random.Range(2.5f, 5f);
+            Debug.Log(spinTimer);
+
+            //Reset
+            resultPanel.SetActive(false);
             resultText.text = " ";
             chuck.SetActive(false);
             karubi.SetActive(false);
