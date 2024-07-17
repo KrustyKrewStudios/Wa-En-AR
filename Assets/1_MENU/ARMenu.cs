@@ -15,14 +15,11 @@ public class ARMenu : MonoBehaviour
     public GameObject wagyuJyu;
     public GameObject salad;
 
-    public GameObject placementIndicator;
-    public GameObject placeButton;
     public WorldTracker worldTracker;
 
     void Start()
     {
        arCamera = GetComponent<ARCamera>();
-       placementIndicator.SetActive(false);
         worldTracker = GetComponent<WorldTracker>();
         worldTracker.StopTracker();
 
@@ -54,7 +51,6 @@ public class ARMenu : MonoBehaviour
         beefPlatter.SetActive(false);
         searedWagyu.SetActive(false);
         uiCanvas.SetActive(false );
-        placementIndicator.SetActive(true);
 
 
     }
@@ -67,7 +63,6 @@ public class ARMenu : MonoBehaviour
         searedWagyu.SetActive(false);
         salad.SetActive(false);
         uiCanvas.SetActive(false);
-        placementIndicator.SetActive(true);
     }
 
     public void SetTata()
@@ -78,7 +73,6 @@ public class ARMenu : MonoBehaviour
         salad.SetActive(false);
         wagyuJyu.SetActive(false);
         uiCanvas.SetActive(false);
-        placementIndicator.SetActive(true);
     }
 
     public void SetPlatter()
@@ -90,7 +84,6 @@ public class ARMenu : MonoBehaviour
         tata.SetActive(false);
         uiCanvas.SetActive(false);
         worldTracker.StartTracker();
-        placementIndicator.SetActive(true);
 
     }
 
@@ -102,8 +95,6 @@ public class ARMenu : MonoBehaviour
         tata.SetActive(false);
         beefPlatter.SetActive(false);
         uiCanvas.SetActive(false);
-        placementIndicator.SetActive(true);
-        placeButton.SetActive(true);
 
     }
 

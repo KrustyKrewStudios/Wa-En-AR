@@ -10406,7 +10406,7 @@ GameObject:
   - component: {fileID: 786595269}
   - component: {fileID: 786595268}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Script
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10424,7 +10424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff6f849f0c6913499d223a27600af36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arCanvas: {fileID: 0}
+  arCanvas: {fileID: 1677499059}
   arCamera: {fileID: 0}
   uiCanvas: {fileID: 6068391258628237493}
   searedWagyu: {fileID: 1856473141}
@@ -10432,8 +10432,6 @@ MonoBehaviour:
   tata: {fileID: 1328868247}
   wagyuJyu: {fileID: 1142256129}
   salad: {fileID: 1077903034}
-  placementIndicator: {fileID: 2591274389800575736}
-  placeButton: {fileID: 0}
   worldTracker: {fileID: 2591274391423278371}
 --- !u!4 &786595269
 Transform:

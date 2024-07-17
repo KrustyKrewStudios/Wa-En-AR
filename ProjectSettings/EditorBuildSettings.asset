@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/1_MENU/ha.unity
-    guid: 58d01e6f9b377144285b21191871323b
+    path: Assets/2_COOKING_GAME/last warning web ar.unity
+    guid: d240228eff59719459c52f5b1980f7e8
   m_configObjects: {}
