@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public class Grill : MonoBehaviour
 {
 
-    public LayerMask raycastLayerMask; // Add a LayerMask for Raycast
+    public LayerMask raycastLayerMask; 
 
     public enum GrillState { Off, Low, Medium, High }
     private GrillState currentState = GrillState.Off;
@@ -25,21 +26,19 @@ public class Grill : MonoBehaviour
 
     public AudioSource sizzlingAudioSource;
 
-    // public Material[] stateMaterials; // Ensure this array has 4 materials for Off, Low, Medium, High
-    //private Renderer grillRenderer;
+    public TextMeshProUGUI grillStateText;
+
+    // Define colors for each state
+    public Color offColor = Color.gray;
+    public Color lowColor = Color.green;
+    public Color mediumColor = Color.yellow;
+    public Color highColor = Color.red;
+
+
 
     private void Start()
     {
-
-      //  grillRenderer = GetComponent<Renderer>();
-     //   if (grillRenderer == null)
-      //  {
-      //      Debug.LogError("Renderer component not found on the Grill GameObject.");
-      //      return;
-      //  }
-
           UpdateGrillState();
-
 
         sizzlingAudioSource.Stop(); // Ensure the audio source is stopped at the start
         
@@ -99,17 +98,11 @@ public class Grill : MonoBehaviour
         }
         Debug.Log("Grill Turned On: " + isTurnedOn);
 
-        // Update the grill material based on the current state
-        //       if (stateMaterials != null && stateMaterials.Length == Enum.GetNames(typeof(GrillState)).Length)
-        //       {
-        //          grillRenderer.material = stateMaterials[(int)currentState];
-        //      }
-        //     else
-        ///        Debug.LogError("State materials array is not properly set up.");
-        //    }
-
         // Manage audio playback
         UpdateSizzlingAudio();
+
+        // Update the grill state text
+        UpdateGrillStateText();
 
         // Invoke the OnGrillStateChanged event if there are any subscribers
         OnGrillStateChanged?.Invoke();
@@ -241,4 +234,31 @@ public class Grill : MonoBehaviour
             Debug.Log("Raycast did not hit any objects.");
         }
     }
+
+    private void UpdateGrillStateText()
+    {
+        if (grillStateText == null) return;
+
+        switch (currentState)
+        {
+            case GrillState.Off:
+                grillStateText.text = "Off";
+                grillStateText.color = offColor;
+                break;
+            case GrillState.Low:
+                grillStateText.text = "Low";
+                grillStateText.color = lowColor;
+                break;
+            case GrillState.Medium:
+                grillStateText.text = "Medium";
+                grillStateText.color = mediumColor;
+                break;
+            case GrillState.High:
+                grillStateText.text = "High";
+                grillStateText.color = highColor;
+                break;
+        }
+    }
+
+
 }
