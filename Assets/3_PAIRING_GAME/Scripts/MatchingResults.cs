@@ -12,7 +12,6 @@ public class MatchingResults : MonoBehaviour
 
     //Drinks declraration
     public Transform spawnPoint;
-    public Transform oldFashionedSpawnPoint;
     public GameObject campfire;
     public GameObject martini;
     public GameObject sake;
@@ -84,9 +83,9 @@ public class MatchingResults : MonoBehaviour
 
     public void SpawnOldFashioned()
     {
-        if (oldFashioned != null && oldFashionedSpawnPoint != null)
+        if (oldFashioned != null && spawnPoint != null)
         {
-            Instantiate(oldFashioned, oldFashionedSpawnPoint.position, oldFashionedSpawnPoint.rotation);
+            Instantiate(oldFashioned, spawnPoint.position, spawnPoint.rotation);
         }
     }
 
@@ -172,7 +171,7 @@ public class MatchingResults : MonoBehaviour
                 //Add to TMP_text
                 ratingText.text = ratingString;
 
-                ClickCounter();
+                //ClickCounter();
             }
         }
         else
@@ -190,7 +189,7 @@ public class MatchingResults : MonoBehaviour
     public void ClickCounter()
     {
         clickCounter++;
-        if (clickCounter == 5)
+        if (clickCounter == 6)
         {
             endPagePanel.gameObject.SetActive(true);
             clickCounter = 0;
@@ -198,3 +197,4 @@ public class MatchingResults : MonoBehaviour
     }
 
 }
+
