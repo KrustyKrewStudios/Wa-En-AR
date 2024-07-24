@@ -9,6 +9,8 @@ public class MatchingResults : MonoBehaviour
     //Declarations
     public TMP_Text ratingText;
     public GameObject ratingPanel;
+    public ParticleSystem cheerEffect;
+    public GameObject cheerFX;
 
     //Drinks declraration
     public Transform spawnPoint;
@@ -55,6 +57,8 @@ public class MatchingResults : MonoBehaviour
         comboRatings.Add("BeefTongue_OldFashioned", 5);
 
         //Debug.Log("Combo Initialied");
+
+        cheerEffect = GetComponent<ParticleSystem>();
     }
 
     public void SpawnCampfire()
@@ -193,7 +197,15 @@ public class MatchingResults : MonoBehaviour
         {
             endPagePanel.gameObject.SetActive(true);
             clickCounter = 0;
+            cheerFX.gameObject.SetActive(true);
+            //cheerEffect.Play();
         }
+    }
+
+    public void EndCheerFX()
+    {
+        cheerFX.gameObject.SetActive(false);
+        //cheerEffect.Stop();
     }
 
 }
