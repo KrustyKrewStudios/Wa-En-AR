@@ -21,6 +21,8 @@ public class OrderManager : MonoBehaviour
 
     public BeefSpawner beefSpawner; // Reference to the BeefSpawner script
 
+    public LayerMask raycastLayerMask; // Add a LayerMask for Raycast
+
     private void Start()
     {
         StartMinigame();
@@ -174,7 +176,59 @@ public class OrderManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
         UpdateOrderText(newOrder);
     }
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) // For mouse click or tap on screen
+        {
+            Debug.Log("Mouse button down detected.");
+            HandleInput(Input.mousePosition);
+        }
 
+        // Handle touch input
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                Debug.Log("Touch detected.");
+                HandleInput(touch.position);
+            }
+        }
+    }
+
+    private void HandleInput(Vector2 screenPosition)
+    {
+        Debug.Log("Handling input at screen position: " + screenPosition);
+
+        if (Camera.main == null)
+        {
+            Debug.LogError("Main camera is not found. Ensure the camera has the 'MainCamera' tag.");
+            return;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask)) // Use the LayerMask in the Raycast
+        {
+            GameObject hitObject = hit.transform.gameObject;
+            Debug.Log("Raycast hit object: " + hitObject.name);
+
+            if (hitObject.CompareTag("Bell"))
+            {
+                Debug.Log("clicked bell");
+                ServeBeef();
+
+            }
+
+
+        }
+        else
+        {
+            Debug.Log("Raycast did not hit any objects.");
+        }
+    }
 
 }
 

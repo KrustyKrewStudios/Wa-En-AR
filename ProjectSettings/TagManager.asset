@@ -24,6 +24,9 @@ TagManager:
   - Martini
   - Sake
   - OldFashioned
+  - Bell
+  - UpBtn
+  - DownBtn
   layers:
   - Default
   - TransparentFX
