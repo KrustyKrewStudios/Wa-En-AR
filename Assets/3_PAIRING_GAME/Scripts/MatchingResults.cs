@@ -11,6 +11,7 @@ public class MatchingResults : MonoBehaviour
     public GameObject ratingPanel;
     public ParticleSystem cheerEffect;
     public GameObject cheerFX;
+    public AudioSource cheerAudio;
 
     //Drinks declraration
     public Transform spawnPoint;
@@ -198,6 +199,7 @@ public class MatchingResults : MonoBehaviour
             endPagePanel.gameObject.SetActive(true);
             clickCounter = 0;
             cheerFX.gameObject.SetActive(true);
+            cheerAudio.Play();
             //cheerEffect.Play();
         }
     }
@@ -205,6 +207,7 @@ public class MatchingResults : MonoBehaviour
     public void EndCheerFX()
     {
         cheerFX.gameObject.SetActive(false);
+        cheerAudio.Stop();
         //cheerEffect.Stop();
     }
 

@@ -13,6 +13,7 @@ public class PairingGame : MonoBehaviour
     public GameObject ribeye;
     public GameObject sirloin;
     public GameObject tongue;
+    public AudioSource wheelAudio;
     public GameObject resultPanel;
 
     //Spin timer
@@ -47,6 +48,8 @@ public class PairingGame : MonoBehaviour
             //Decrement the spin timer
             spinTimer -= Time.deltaTime;
 
+            wheelAudio.Play();
+
             //Debug.Log("Rotating");
             //Debug.Log(spinDuration);
             //Debug.Log(spinTimer);
@@ -56,6 +59,7 @@ public class PairingGame : MonoBehaviour
             {
                 isSpinning = false;
                 currentSpeed = 0f;
+                wheelAudio.Stop();
 
                 //Start coroutine to delay showing result
                 StartCoroutine(DelayedShowResult(1f));
@@ -70,6 +74,7 @@ public class PairingGame : MonoBehaviour
                 {
                     isSpinning = false;
                     currentSpeed = 0f;
+                    wheelAudio.Stop();
 
                     //Start coroutine to delay showing result
                     StartCoroutine(DelayedShowResult(1f));
