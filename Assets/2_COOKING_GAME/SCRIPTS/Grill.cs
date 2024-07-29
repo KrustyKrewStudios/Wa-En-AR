@@ -34,11 +34,12 @@ public class Grill : MonoBehaviour
     public Color mediumColor = Color.yellow;
     public Color highColor = Color.red;
 
+    public AudioSource buttonAudio;
 
 
     private void Start()
-    {
-          UpdateGrillState();
+    {   
+        UpdateGrillState();
 
         sizzlingAudioSource.Stop(); // Ensure the audio source is stopped at the start
         
@@ -217,6 +218,7 @@ public class Grill : MonoBehaviour
 
             if (hitObject.CompareTag("UpBtn"))
             {
+                buttonAudio.Play();
                 Debug.Log("clicked on grill toggle up btn");
                 IncreaseGrillState();
 
@@ -224,6 +226,7 @@ public class Grill : MonoBehaviour
 
             if (hitObject.CompareTag("DownBtn"))
             {
+                buttonAudio.Play();
                 Debug.Log("clicked on grill toggle down btn");
                 DecreaseGrillState();
             }

@@ -23,8 +23,12 @@ public class OrderManager : MonoBehaviour
 
     public LayerMask raycastLayerMask; // Add a LayerMask for Raycast
 
+    private AudioSource audioSource;
+
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         StartMinigame();
     }
 
@@ -81,6 +85,8 @@ public class OrderManager : MonoBehaviour
     // Function to check the order when the serve button is clicked
     public void ServeBeef()
     {
+        audioSource.Play();
+
         GameObject beefOnPlate = beefSpawner.GetBeefOnPlate();
 
         if (beefOnPlate != null)
@@ -218,6 +224,8 @@ public class OrderManager : MonoBehaviour
             if (hitObject.CompareTag("Bell"))
             {
                 Debug.Log("clicked bell");
+                audioSource.Play();
+
                 ServeBeef();
 
             }

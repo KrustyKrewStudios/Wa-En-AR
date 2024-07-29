@@ -255,6 +255,7 @@ public class BeefSpawner : MonoBehaviour
             if (hitObject.CompareTag("Karubi") || hitObject.CompareTag("Sirloin") || hitObject.CompareTag("Chuck") || hitObject.CompareTag("Ribeye") || hitObject.CompareTag("Tongue"))
             {
                 selectedBeef = hitObject;
+                OutlineSelection.Instance.OutlineBeef(selectedBeef);
                 Debug.Log("Selected beef: " + selectedBeef.name);
             }
             else if (hitObject.CompareTag("ServingPlate"))
