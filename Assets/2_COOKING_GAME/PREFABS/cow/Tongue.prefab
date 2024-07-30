@@ -127,14 +127,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851691695303884085}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 500878703697462265}
   m_Father: {fileID: 3596545198641704143}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -304,7 +304,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a837e6d7a33ad9f44bf96d6ff19ac02e, type: 2}
   - {fileID: 2100000, guid: 28f3cb7d955246940a6e9c1b4aa4c928, type: 2}
   - {fileID: 2100000, guid: 3c2cbd87d645d294ea92049f34b6a361, type: 2}
-  baseCookingTime: 10
+  baseCookingTime: 12
   progressBarUI: {fileID: 1851691695303884085}
   progressBar: {fileID: 3468535419885721248}
 --- !u!54 &602942760613849672
