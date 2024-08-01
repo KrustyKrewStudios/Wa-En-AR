@@ -15,13 +15,17 @@ public class Instructions : MonoBehaviour
 
     public void InstuctionsReset()
     {
-        instructionsPanel.gameObject.SetActive(true);
+        if (!instructionsPanel.activeInHierarchy)
+        {
+            // Activate instructionsPanel
+            instructionsPanel.SetActive(true);
 
-        wheelInstructions.gameObject.SetActive(true);
-
-        drinkInstructions.gameObject.SetActive(false);
-        menuInstructions.gameObject.SetActive(false);
-        rateInstructions.gameObject.SetActive(false);
+            // Set the visibility of other instruction panels
+            wheelInstructions.SetActive(true);
+            drinkInstructions.SetActive(false);
+            menuInstructions.SetActive(false);
+            rateInstructions.SetActive(false);
+        }
     }
 
 }

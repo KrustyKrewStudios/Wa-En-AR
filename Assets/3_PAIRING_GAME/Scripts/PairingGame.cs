@@ -15,6 +15,7 @@ public class PairingGame : MonoBehaviour
     public GameObject tongue;
     public AudioSource wheelAudio;
     public GameObject resultPanel;
+    public GameObject invalidPanel;
 
     //Spin timer
     private bool isSpinning = false;
@@ -32,6 +33,7 @@ public class PairingGame : MonoBehaviour
         ribeye.SetActive(false);
         sirloin.SetActive(false);
         tongue.SetActive(false);
+        invalidPanel.SetActive(false);
     }
 
     void Update()
@@ -118,17 +120,24 @@ public class PairingGame : MonoBehaviour
 
     public void SpinWheel()
     {
+        // Check if any beef items are active
+        if (chuck.activeInHierarchy || karubi.activeInHierarchy || ribeye.activeInHierarchy || sirloin.activeInHierarchy || tongue.activeInHierarchy)
+        {
+            invalidPanel.SetActive(true); // Show the invalid panel
+            return; // Return early to prevent spinning
+        }
+
         if (!isSpinning)
         {
-            //Start spinning
+            // Start spinning
             isSpinning = true;
             currentSpeed = 1000f;
 
-            //Set random time for spinning
+            // Set random time for spinning
             spinTimer = Random.Range(2.5f, 5f);
             Debug.Log(spinTimer);
 
-            //Reset
+            // Reset
             resultPanel.SetActive(false);
             resultText.text = " ";
             chuck.SetActive(false);
@@ -136,6 +145,7 @@ public class PairingGame : MonoBehaviour
             ribeye.SetActive(false);
             sirloin.SetActive(false);
             tongue.SetActive(false);
+            invalidPanel.SetActive(false); // Hide the invalid panel if previously shown
         }
 
 
