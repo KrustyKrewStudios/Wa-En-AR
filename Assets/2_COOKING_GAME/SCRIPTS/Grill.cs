@@ -7,7 +7,7 @@ using TMPro;
 public class Grill : MonoBehaviour
 {
 
-    public LayerMask raycastLayerMask; 
+    public LayerMask raycastLayerMask;
 
     public enum GrillState { Off, Low, Medium, High }
     private GrillState currentState = GrillState.Off;
@@ -36,13 +36,17 @@ public class Grill : MonoBehaviour
 
     public AudioSource buttonAudio;
 
+    public float touchCooldown = 1f; // Cooldown in seconds
+    private float lastTouchTime = 0f;
+
+    private bool isHandlingInput = false;
 
     private void Start()
-    {   
+    {
         UpdateGrillState();
 
         sizzlingAudioSource.Stop(); // Ensure the audio source is stopped at the start
-        
+
 
     }
     private void OnEnable()
@@ -66,21 +70,28 @@ public class Grill : MonoBehaviour
         if (currentState < GrillState.High)
         {
             currentState++;
+            Debug.Log("IncreaseGrillState called. New state: " + currentState);
             UpdateGrillState();
-            Debug.Log("Grill State Increased: " + currentState);
+        }
+        else
+        {
+            Debug.Log("IncreaseGrillState called, but state is already at High.");
         }
     }
 
     public void DecreaseGrillState()
     {
         if (currentState > GrillState.Off)
-        {
+        {   
             currentState--;
+            Debug.Log("DecreaseGrillState called. New state: " + currentState);
             UpdateGrillState();
-            Debug.Log("Grill State Decreased: " + currentState);
+        }
+        else
+        {
+            Debug.Log("DecreaseGrillState called, but state is already at Off.");
         }
     }
-
     private void UpdateGrillState()
     {
         // Turn the grill on if the state is Low, Medium, or High
@@ -115,7 +126,7 @@ public class Grill : MonoBehaviour
         DisableAllParticleSystems(); // Disable all first
         tinyFire.SetActive(true);
         mediumFire.SetActive(true);
-        bigFire.SetActive(true);    
+        bigFire.SetActive(true);
 
 
         switch (currentState)
@@ -177,41 +188,33 @@ public class Grill : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // For mouse click or tap on screen
+        if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Mouse button down detected.");
             HandleInput(Input.mousePosition);
         }
 
-        // Handle touch input
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Began)
-            {
-                Debug.Log("Touch detected.");
-                HandleInput(touch.position);
-            }
-        }
     }
-
     private void HandleInput(Vector2 screenPosition)
     {
-        Debug.Log("Handling input at screen position: " + screenPosition);
+        if (isHandlingInput) return; // Prevent handling multiple inputs at the same time
+
+        isHandlingInput = true;
 
         if (Camera.main == null)
         {
-            Debug.LogError("Main camera is not found. Ensure the camera has the 'MainCamera' tag.");
+            Debug.LogError("Main camera is not found.");
+            isHandlingInput = false;
             return;
         }
 
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask)) // Use the LayerMask in the Raycast
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask))
         {
             GameObject hitObject = hit.transform.gameObject;
             Debug.Log("Raycast hit object: " + hitObject.name);
@@ -221,7 +224,6 @@ public class Grill : MonoBehaviour
                 buttonAudio.Play();
                 Debug.Log("clicked on grill toggle up btn");
                 IncreaseGrillState();
-
             }
 
             if (hitObject.CompareTag("DownBtn"))
@@ -230,12 +232,14 @@ public class Grill : MonoBehaviour
                 Debug.Log("clicked on grill toggle down btn");
                 DecreaseGrillState();
             }
-
         }
         else
         {
             Debug.Log("Raycast did not hit any objects.");
         }
+
+        // Reset input handling
+        isHandlingInput = false;
     }
 
     private void UpdateGrillStateText()
