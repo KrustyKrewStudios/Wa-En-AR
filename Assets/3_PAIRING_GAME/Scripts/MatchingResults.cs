@@ -6,35 +6,36 @@ using TMPro;
 
 public class MatchingResults : MonoBehaviour
 {
-    //Declarations
+    // Declarations
     public TMP_Text ratingText;
     public GameObject ratingPanel;
     public ParticleSystem cheerEffect;
     public GameObject cheerFX;
+    public AudioSource cheerAudio;
 
-    //Drinks declraration
+    // Drinks declaration
     public Transform spawnPoint;
     public GameObject campfire;
     public GameObject martini;
     public GameObject sake;
     public GameObject oldFashioned;
 
-    //Counter for button clicks
+    // Counter for button clicks
     private int clickCounter = 0;
     public GameObject endPagePanel;
 
     private HashSet<string> detectedItems = new HashSet<string>();
 
-    //List of Items
+    // List of Items
     private string[] beefItems = { "Chuck", "Sirloin", "Ribeye", "Karubi", "BeefTongue" };
     private string[] drinkItems = { "Campfire", "Martini", "Sake", "OldFashioned" };
 
-    //Dictionary to store ratings for each combination
+    // Dictionary to store ratings for each combination
     private Dictionary<string, int> comboRatings = new Dictionary<string, int>();
 
     void Start()
     {
-        //Initialize Combo ratings
+        // Initialize Combo ratings
         comboRatings.Add("Chuck_Campfire", 8);
         comboRatings.Add("Chuck_Martini", 6);
         comboRatings.Add("Chuck_Sake", 8);
@@ -51,19 +52,33 @@ public class MatchingResults : MonoBehaviour
         comboRatings.Add("Karubi_Martini", 5);
         comboRatings.Add("Karubi_Sake", 7);
         comboRatings.Add("Karubi_OldFashioned", 9);
-        comboRatings.Add("BeefTongue_Campfire", 5);
-        comboRatings.Add("BeefTongue_Martini", 5);
-        comboRatings.Add("BeefTongue_Sake", 5);
-        comboRatings.Add("BeefTongue_OldFashioned", 5);
-
-        //Debug.Log("Combo Initialied");
+        comboRatings.Add("BeefTongue_Campfire", 7);
+        comboRatings.Add("BeefTongue_Martini", 6);
+        comboRatings.Add("BeefTongue_Sake", 8);
+        comboRatings.Add("BeefTongue_OldFashioned", 10);
 
         cheerEffect = GetComponent<ParticleSystem>();
     }
 
+    private bool IsAnyDrinkActive()
+    {
+        foreach (string drink in drinkItems)
+        {
+            if (IsItemActive(drink))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void SpawnCampfire()
     {
-        if (campfire != null && spawnPoint != null)
+        if (IsAnyDrinkActive())
+        {
+            ShowInvalidMessage();
+        }
+        else if (campfire != null && spawnPoint != null)
         {
             Instantiate(campfire, spawnPoint.position, spawnPoint.rotation);
         }
@@ -71,7 +86,11 @@ public class MatchingResults : MonoBehaviour
 
     public void SpawnSake()
     {
-        if (sake != null && spawnPoint != null)
+        if (IsAnyDrinkActive())
+        {
+            ShowInvalidMessage();
+        }
+        else if (sake != null && spawnPoint != null)
         {
             Instantiate(sake, spawnPoint.position, spawnPoint.rotation);
         }
@@ -79,7 +98,11 @@ public class MatchingResults : MonoBehaviour
 
     public void SpawnMartini()
     {
-        if (martini != null && spawnPoint != null)
+        if (IsAnyDrinkActive())
+        {
+            ShowInvalidMessage();
+        }
+        else if (martini != null && spawnPoint != null)
         {
             Instantiate(martini, spawnPoint.position, spawnPoint.rotation);
         }
@@ -87,52 +110,87 @@ public class MatchingResults : MonoBehaviour
 
     public void SpawnOldFashioned()
     {
-        if (oldFashioned != null && spawnPoint != null)
+        if (IsAnyDrinkActive())
+        {
+            ShowInvalidMessage();
+        }
+        else if (oldFashioned != null && spawnPoint != null)
         {
             Instantiate(oldFashioned, spawnPoint.position, spawnPoint.rotation);
         }
     }
 
-    //Detect items via OnTrigger & Tags
-    void OnTriggerEnter(Collider other)
+    private void ShowInvalidMessage()
     {
-        //Debug.Log("Trigger script working");
-
-        string tag = other.tag;
-        Debug.Log($"Tag detected: {tag}");
-        detectedItems.Add(tag);
+        string invalidMessage = "Cannot spawn a new drink while another drink is present";
+        ratingText.text = invalidMessage;
+        ratingPanel.SetActive(true);
     }
 
-    /*void OnTriggerExit(Collider other)
+    // Detect items via OnTrigger & Tags
+    void OnTriggerEnter(Collider other)
     {
-        string tag = other.tag;
-        //Debug.Log($"Tag exited: {tag}");
-        detectedItems.Remove(tag);
-        other.gameObject.SetActive(false);
-    }*/
+        if (other.gameObject.activeInHierarchy)
+        {
+            string tag = other.tag;
+            Debug.Log($"Tag detected: {tag}");
+            detectedItems.Add(tag);
+        }
+    }
+
+    private bool IsItemActive(string itemTag)
+    {
+        GameObject[] itemObjects = GameObject.FindGameObjectsWithTag(itemTag);
+        foreach (GameObject itemObject in itemObjects)
+        {
+            if (itemObject.activeInHierarchy)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void CheckForCombinations()
     {
-        //Debug.Log("Detected items: " + string.Join(", ", detectedItems));
+        bool validPairFound = false;
 
-        //Check for which beef
+        // Check for which beef
         foreach (string beef in beefItems)
         {
-            //Check for which drink
+            // Check for which drink
             foreach (string drink in drinkItems)
             {
-                if (detectedItems.Contains(beef) && detectedItems.Contains(drink))
+                if (IsItemActive(beef) && IsItemActive(drink))
                 {
-                    //Call for func for rating items 
-                    RatePairing(beef, drink);
+                    if (detectedItems.Contains(beef) && detectedItems.Contains(drink))
+                    {
+                        // Call function for rating items 
+                        RatePairing(beef, drink);
+                        validPairFound = true;
+                        ClickCounter();
+                        break; // Exit the loop if a valid pair is found
+                    }
                 }
             }
+            if (validPairFound)
+            {
+                break; // Exit the loop if a valid pair is found
+            }
+        }
+
+        // If no valid pair is found, set the rating to invalid
+        if (!validPairFound)
+        {
+            string ratingString = "Rating invalid";
+            ratingText.text = ratingString;
+            ratingPanel.SetActive(true);
         }
     }
 
     public void DeactivateRatedItems()
     {
-        List<string> itemsToDeactivate = new();
+        List<string> itemsToDeactivate = new List<string>();
 
         foreach (string beef in beefItems)
         {
@@ -158,46 +216,33 @@ public class MatchingResults : MonoBehaviour
 
     private void RatePairing(string beef, string drink)
     {
-        //Add to string to check for rating given (in Start())
         string comboKey = $"{beef}_{drink}";
         if (comboRatings.TryGetValue(comboKey, out int rating))
         {
-
-            //Convert to string 
             string ratingString = $"Rating for pairing is {rating}";
+            ratingText.text = ratingString;
+            ratingPanel.SetActive(true);
 
-            //Debug.Log($"Rating for pairing {beef} with {drink}: {rating}");
 
-            if (ratingText != null)
-            {
-                ratingPanel.SetActive(true);
-
-                //Add to TMP_text
-                ratingText.text = ratingString;
-
-                //ClickCounter();
-            }
         }
         else
         {
-            string ratingString = $"No rating found for pairing {beef} with {drink}";
-
-            if (ratingText != null)
-            {
-                ratingPanel.SetActive(true);
-                ratingText.text = ratingString;
-            }
+            string ratingString = "Rating invalid";
+            ratingText.text = ratingString;
+            ratingPanel.SetActive(true);
         }
     }
-
     public void ClickCounter()
     {
         clickCounter++;
-        if (clickCounter == 6)
+        Debug.Log("Click count:" + clickCounter);
+
+        if (clickCounter == 5)
         {
             endPagePanel.gameObject.SetActive(true);
             clickCounter = 0;
             cheerFX.gameObject.SetActive(true);
+            cheerAudio.Play();
             //cheerEffect.Play();
         }
     }
@@ -205,6 +250,7 @@ public class MatchingResults : MonoBehaviour
     public void EndCheerFX()
     {
         cheerFX.gameObject.SetActive(false);
+        cheerAudio.Stop();
         //cheerEffect.Stop();
     }
 
