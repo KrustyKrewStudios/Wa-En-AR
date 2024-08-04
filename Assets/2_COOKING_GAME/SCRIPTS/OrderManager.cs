@@ -19,11 +19,17 @@ public class OrderManager : MonoBehaviour
     private int totalOrdersToServe = 5; // Total orders to serve to win the game
 
 
+    public GameObject endScreenPanel; // Reference to the End Screen Panel UI
+    private bool isEndlessMode = false; // Flag to track if the game is in endless mode
+
+
     public BeefSpawner beefSpawner; // Reference to the BeefSpawner script
 
     public LayerMask raycastLayerMask; // Add a LayerMask for Raycast
 
     private AudioSource audioSource;
+    public AudioSource wrongAudio;
+    public AudioSource winAudio;
 
     private void Start()
     {
@@ -35,18 +41,28 @@ public class OrderManager : MonoBehaviour
     public void StartMinigame()
     {
         correctOrdersServed = 0; // Reset the counter at the start of the game
+        isEndlessMode = false; // Ensure we are not in endless mode initially
+        endScreenPanel.SetActive(false); // Hide end screen panel
         SetNextOrder(); // Start with the first order
     }
 
     private void SetNextOrder()
     {
-        currentOrderType = GetRandomBeefType();
-        currentOrderState = GetRandomBeefState();
-        UpdateOrderText($"{currentOrderState} {currentOrderType}");
-        UpdateOrderTrackerText();
-        Debug.Log($"New Order: {currentOrderState} {currentOrderType}");
+        if (!isEndlessMode)
+        {
+            currentOrderType = GetRandomBeefType();
+            currentOrderState = GetRandomBeefState();
+            UpdateOrderText($"{currentOrderState} {currentOrderType}");
+            UpdateOrderTrackerText();
+            Debug.Log($"New Order: {currentOrderState} {currentOrderType}");
+        }
+        else
+        {
+            currentOrderType = GetRandomBeefType();
+            currentOrderState = GetRandomBeefState();
+            UpdateOrderText($"{currentOrderState} {currentOrderType}");
+        }
     }
-
     private BeefType GetRandomBeefType()
     {
         BeefType[] beefTypes = { BeefType.Karubi, BeefType.Sirloin, BeefType.Chuck, BeefType.Ribeye, BeefType.Tongue };
@@ -70,8 +86,11 @@ public class OrderManager : MonoBehaviour
     // Function to update the order tracker text
     private void UpdateOrderTrackerText()
     {
-        orderTrackerText.text = $"Order {correctOrdersServed + 1}/{totalOrdersToServe}";
-        Debug.Log($"Order {correctOrdersServed + 1}/{totalOrdersToServe}");
+        if (!isEndlessMode)
+        {
+            orderTrackerText.text = $"Order {correctOrdersServed + 1}/{totalOrdersToServe}";
+            Debug.Log($"Order {correctOrdersServed + 1}/{totalOrdersToServe}");
+        }
     }
 
 
@@ -124,6 +143,7 @@ public class OrderManager : MonoBehaviour
                     if (!typeCorrect) feedback += "Wrong Beef Type ";
                     if (!stateCorrect) feedback += "Wrong Temperature ";
                     orderText.text = feedback.Trim();
+                    wrongAudio.Play();
 
                     StartCoroutine(ResetOrderTextAfterDelay(3f, $"{currentOrderState} {currentOrderType}"));
                 }
@@ -176,7 +196,21 @@ public class OrderManager : MonoBehaviour
         {
             orderText.text = "Congratulations! You served all orders correctly!";
             Debug.Log("good job dumbass");
-        }
+            winAudio.Play();
+            endScreenPanel.SetActive(true);
+
+
+    }
+
+    public void ContinueInEndlessMode()
+    {
+        isEndlessMode = true;
+        endScreenPanel.SetActive(false);
+        correctOrdersServed = 0; // Reset the orders count for endless mode
+        SetNextOrder(); // Set the next order
+    }
+
+
     private IEnumerator ResetOrderTextAfterDelay(float delay, string newOrder)
     {
         yield return new WaitForSeconds(delay);

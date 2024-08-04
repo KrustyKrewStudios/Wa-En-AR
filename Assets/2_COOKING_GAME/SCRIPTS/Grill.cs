@@ -36,9 +36,6 @@ public class Grill : MonoBehaviour
 
     public AudioSource buttonAudio;
 
-    public float touchCooldown = 1f; // Cooldown in seconds
-    private float lastTouchTime = 0f;
-
     private bool isHandlingInput = false;
 
     private void Start()
