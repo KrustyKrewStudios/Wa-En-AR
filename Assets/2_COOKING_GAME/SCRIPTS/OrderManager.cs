@@ -58,6 +58,7 @@ public class OrderManager : MonoBehaviour
         }
         else
         {
+            orderTrackerText.gameObject.SetActive(false); // Hide order tracker in endless mode
             currentOrderType = GetRandomBeefType();
             currentOrderState = GetRandomBeefState();
             UpdateOrderText($"{currentOrderState} {currentOrderType}");
