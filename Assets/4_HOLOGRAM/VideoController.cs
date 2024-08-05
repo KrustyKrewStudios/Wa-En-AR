@@ -8,7 +8,7 @@ public class VideoController : MonoBehaviour
     void Start()
     {
         // Set up the video path and prepare the video player
-        string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, "side-eye_1.mp4");
+        string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, "christmas_vid.mp4");
         videoPlayer.url = videoPath;
         videoPlayer.prepareCompleted += OnVideoPrepared;
 
@@ -18,20 +18,46 @@ public class VideoController : MonoBehaviour
 
     public void PlayVideo()
     {
-        // Lock screen orientation to landscape when starting the video
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-
-        // Start playing the video
         if (videoPlayer.isPrepared)
         {
             videoPlayer.Play();
         }
         else
         {
-            // If the video is not yet prepared, start playing after preparation is complete
             videoPlayer.prepareCompleted += OnVideoPrepared;
+            videoPlayer.Prepare();
+            videoPlayer.Play();
+
         }
     }
+
+    public void PauseVideo()
+    {
+        // Pause the video
+        if (videoPlayer.isPlaying)
+        {
+            videoPlayer.Pause();
+        }
+    }
+
+    public void StopVideo()
+    {
+        if (videoPlayer.isPlaying || videoPlayer.isPaused)
+        {
+            videoPlayer.Stop();
+        }
+
+    }
+
+    public void ResumeVideo()
+    {
+        if (videoPlayer.isPaused)
+        {
+            videoPlayer.Play();
+        }
+    }
+
+
 
     void OnVideoPrepared(VideoPlayer vp)
     {
