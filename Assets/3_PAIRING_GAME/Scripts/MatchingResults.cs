@@ -1,3 +1,9 @@
+/*
+ * Name: Bhoomika Manot
+ * Date: 1 July 2024
+ * Description: Code for spawning drinks, detecting combos & counting the number of times players have played to spawn panel for reward
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,36 +12,36 @@ using TMPro;
 
 public class MatchingResults : MonoBehaviour
 {
-    // Declarations
+    //Declarations
     public TMP_Text ratingText;
     public GameObject ratingPanel;
     public ParticleSystem cheerEffect;
     public GameObject cheerFX;
     public AudioSource cheerAudio;
 
-    // Drinks declaration
+    //Drinks declaration
     public Transform spawnPoint;
     public GameObject campfire;
     public GameObject martini;
     public GameObject sake;
     public GameObject oldFashioned;
 
-    // Counter for button clicks
+    //Counter for button clicks
     private int clickCounter = 0;
     public GameObject endPagePanel;
 
     private HashSet<string> detectedItems = new HashSet<string>();
 
-    // List of Items
+    //List of Items
     private string[] beefItems = { "Chuck", "Sirloin", "Ribeye", "Karubi", "BeefTongue" };
     private string[] drinkItems = { "Campfire", "Martini", "Sake", "OldFashioned" };
 
-    // Dictionary to store ratings for each combination
+    //Dictionary to store ratings for each combination
     private Dictionary<string, (int rating, string description)> comboRatings = new Dictionary<string, (int, string)>();
 
     void Start()
     {
-        // Initialize Combo ratings
+        //Initialize Combo ratings
         comboRatings.Add("Chuck_Campfire", (7, "Works well but less optimal than Rib Eye or Sirloin."));
         comboRatings.Add("Chuck_Martini", (6, "Works but doesn’t highlight the cocktail’s citrus as well."));
         comboRatings.Add("Chuck_Sake", (8, "Pairs well with the umami depth, enhancing the Sake’s flavour."));
@@ -60,6 +66,7 @@ public class MatchingResults : MonoBehaviour
         cheerEffect = GetComponent<ParticleSystem>();
     }
 
+    //Check for drink
     private bool IsAnyDrinkActive()
     {
         foreach (string drink in drinkItems)
@@ -72,6 +79,7 @@ public class MatchingResults : MonoBehaviour
         return false;
     }
 
+    //Spawn drinks
     public void SpawnCampfire()
     {
         if (IsAnyDrinkActive())
@@ -120,6 +128,7 @@ public class MatchingResults : MonoBehaviour
         }
     }
 
+    //To prevent multiple drinks from spawning
     private void ShowInvalidMessage()
     {
         string invalidMessage = "Cannot spawn a new drink while another drink is present";
@@ -127,7 +136,7 @@ public class MatchingResults : MonoBehaviour
         ratingPanel.SetActive(true);
     }
 
-    // Detect items via OnTrigger & Tags
+    //Detect items via OnTrigger & Tags
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.activeInHierarchy)
@@ -138,6 +147,7 @@ public class MatchingResults : MonoBehaviour
         }
     }
 
+    //To remove items from being undetected
     private bool IsItemActive(string itemTag)
     {
         GameObject[] itemObjects = GameObject.FindGameObjectsWithTag(itemTag);
@@ -151,6 +161,7 @@ public class MatchingResults : MonoBehaviour
         return false;
     }
 
+    //Check for combination via tags
     public void CheckForCombinations()
     {
         bool validPairFound = false;
@@ -165,17 +176,22 @@ public class MatchingResults : MonoBehaviour
                 {
                     if (detectedItems.Contains(beef) && detectedItems.Contains(drink))
                     {
-                        // Call function for rating items 
+                        //Call function for rating items 
                         RatePairing(beef, drink);
                         validPairFound = true;
+
+                        //Add count
                         ClickCounter();
-                        break; // Exit the loop if a valid pair is found
+
+                        //Exit the loop if a valid pair is found
+                        break; 
                     }
                 }
             }
             if (validPairFound)
             {
-                break; // Exit the loop if a valid pair is found
+                //Exit the loop if a valid pair is found
+                break; 
             }
         }
 
@@ -188,6 +204,7 @@ public class MatchingResults : MonoBehaviour
         }
     }
 
+    //Remove items once rated
     public void DeactivateRatedItems()
     {
         List<string> itemsToDeactivate = new List<string>();
@@ -214,9 +231,13 @@ public class MatchingResults : MonoBehaviour
         }
     }
 
+    //Rate pairings
     private void RatePairing(string beef, string drink)
     {
+        //Convert to string
         string comboKey = $"{beef}_{drink}";
+
+        //Getting rating
         if (comboRatings.TryGetValue(comboKey, out var ratingInfo))
         {
             string ratingString = $"Rating for pairing is {ratingInfo.rating}\n{ratingInfo.description}";
@@ -231,6 +252,7 @@ public class MatchingResults : MonoBehaviour
         }
     }
 
+    //Add count to give free dish
     public void ClickCounter()
     {
         clickCounter++;
@@ -246,6 +268,7 @@ public class MatchingResults : MonoBehaviour
         }
     }
 
+    //Close Cheer FX on Button Click
     public void EndCheerFX()
     {
         cheerFX.gameObject.SetActive(false);

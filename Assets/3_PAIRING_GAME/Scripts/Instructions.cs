@@ -15,12 +15,13 @@ public class Instructions : MonoBehaviour
 
     public void InstuctionsReset()
     {
+        //Check if InstructionsPanel is active
         if (!instructionsPanel.activeInHierarchy)
         {
-            // Activate instructionsPanel
+            //Activate InstructionsPanel
             instructionsPanel.SetActive(true);
 
-            // Set the visibility of other instruction panels
+            //Set visible InstructionsPanel
             wheelInstructions.SetActive(true);
             drinkInstructions.SetActive(false);
             menuInstructions.SetActive(false);
