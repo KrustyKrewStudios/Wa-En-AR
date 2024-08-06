@@ -1,3 +1,8 @@
+/*
+ * Author: Curtis Low
+ * Date: 06/08/2024
+ * Description: handles spawning different types of beef objects and managing their interactions with grill spots and the serving plate
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,24 +18,33 @@ public class BeefSpawner : MonoBehaviour
 
     public OrderManager orderManager;
 
-    public Transform beefParent; // Parent transform for the spawned beef objects
+    // Parent transform for the spawned beef objects
+    public Transform beefParent;
 
+    // Grill spots where beef will drop to
+    public Transform[] grillSpots;
+    // Spot where beef can be served 
+    public Transform servingPlateSpot;
 
-    public Transform[] grillSpots; // Assign multiple grill spots in the inspector
-    public Transform servingPlateSpot; // Single serving plate spot
+    // Height from which the beef will drop
+    public float dropHeight = 2.0f;
 
-    public float dropHeight = 2.0f; // Height from which the beef drops
+    // Currently selected beef
+    private GameObject selectedBeef;
 
-    private GameObject selectedBeef; // Currently selected beef
-
+    // Array to track occupied grill spots
     private bool[] grillSpotOccupied;
-    public bool plateOccupied = false; // Track if serving plate spot is occupied
-    private GameObject plateBeef; // Store the reference to the beef object
+    // Track if the serving plate is occupied
+    public bool plateOccupied = false;
+    private GameObject plateBeef;
 
+    // Map to track which spot each beef occupies
     private Dictionary<GameObject, int> beefSpotIndexMap; // Maps beef objects to their spot indices
 
-    public LayerMask raycastLayerMask; // Add a LayerMask for Raycast
+    // LayerMask to filter objects in raycast
+    public LayerMask raycastLayerMask;
 
+    // Initialize grill spots and beef spot index map
     void Start()
     {
         if (grillSpots == null || grillSpots.Length == 0)
@@ -42,6 +56,7 @@ public class BeefSpawner : MonoBehaviour
         beefSpotIndexMap = new Dictionary<GameObject, int>();
     }
 
+    // Spawn a Karubi beef object at the next available grill spot  
     public void SpawnKarubi()
     {
         int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
@@ -64,6 +79,7 @@ public class BeefSpawner : MonoBehaviour
     }
 
 
+    // Spawn a Sirloin beef object at the next available grill spot
     public void SpawnSirloin()
     {
         int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
@@ -85,6 +101,7 @@ public class BeefSpawner : MonoBehaviour
         beefSpotIndexMap[newSirloin] = nextGrillSpotIndex; // Map beef to grill spot index
     }
 
+    // Spawn a Ribeye beef object at the next available grill spot
     public void SpawnRibeye()
     {
         int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
@@ -106,7 +123,7 @@ public class BeefSpawner : MonoBehaviour
         beefSpotIndexMap[newRibeye] = nextGrillSpotIndex; // Map beef to grill spot index
     }
 
-
+    // Spawn a Chuck beef object at the next available grill spot
     public void SpawnChuck()
     {
         int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
@@ -128,6 +145,7 @@ public class BeefSpawner : MonoBehaviour
         beefSpotIndexMap[newChuck] = nextGrillSpotIndex; // Map beef to grill spot index
     }
 
+    // Spawn a Tongue beef object at the next available grill spot
     public void SpawnTongue()
     {
         int nextGrillSpotIndex = GetNextAvailableSpot(grillSpotOccupied);
@@ -149,7 +167,7 @@ public class BeefSpawner : MonoBehaviour
         beefSpotIndexMap[newTongue] = nextGrillSpotIndex; // Map beef to grill spot index
     }
 
-
+    // Coroutine to animate the drop of beef to the grill spot
     private IEnumerator DropToGrill(GameObject beef, Vector3 targetPosition)
     {
         float duration = 1.0f; // Duration of the drop animation
@@ -162,10 +180,11 @@ public class BeefSpawner : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
+        // Ensure final position is set
         beef.transform.position = targetPosition;
     }
 
+    // Clear all beef objects from the scene and reset internal states
     public void ClearBeef()
     {
         GameObject[] karubiObjects = GameObject.FindGameObjectsWithTag("Karubi");
@@ -203,7 +222,7 @@ public class BeefSpawner : MonoBehaviour
 
         Debug.Log("All spawned beef (Karubi and Sirloin) has been cleared from the scene.");
 
-        // Reset the indices after clearing the beef
+        // Reset the grill spots and serving plate
         for (int i = 0; i < grillSpotOccupied.Length; i++)
         {
             grillSpotOccupied[i] = false;
@@ -222,7 +241,7 @@ public class BeefSpawner : MonoBehaviour
         }
 
     }
-
+    // Handle input by raycasting to detect and interact with beef objects or serving plate
     private void HandleInput(Vector2 screenPosition)
     {
         Debug.Log("Handling input at screen position: " + screenPosition);
@@ -241,9 +260,12 @@ public class BeefSpawner : MonoBehaviour
             GameObject hitObject = hit.transform.gameObject;
             Debug.Log("Raycast hit object: " + hitObject.name);
 
+            // Check if the hit object is beef or the serving plate
             if (hitObject.CompareTag("Karubi") || hitObject.CompareTag("Sirloin") || hitObject.CompareTag("Chuck") || hitObject.CompareTag("Ribeye") || hitObject.CompareTag("Tongue"))
             {
                 selectedBeef = hitObject;
+
+                // Highlight the selected beef
                 OutlineSelection.Instance.OutlineBeef(selectedBeef);
                 Debug.Log("Selected beef: " + selectedBeef.name);
             }
@@ -252,6 +274,7 @@ public class BeefSpawner : MonoBehaviour
                 Debug.Log("Serving plate tapped.");
                 if (selectedBeef != null)
                 {
+                    // Move the selected beef to the serving plate
                     MoveSelectedBeef();
                 }
                 else
@@ -266,6 +289,8 @@ public class BeefSpawner : MonoBehaviour
         }
     }
 
+    // Move the selected beef to the serving plate
+    // the back to grill portion is not really working as intended
     public void MoveSelectedBeef()
     {
         if (selectedBeef == null) return;
@@ -311,7 +336,7 @@ public class BeefSpawner : MonoBehaviour
         }
     }
 
-
+    // Coroutine to animate the movement of beef to the target position
     private IEnumerator MoveBeef(GameObject beef, Vector3 targetPosition)
     {
         float duration = 0.5f; // Duration of the move animation
@@ -328,6 +353,7 @@ public class BeefSpawner : MonoBehaviour
         beef.transform.position = targetPosition;
     }
 
+    // Get the index of the next available grill spot
     private int GetNextAvailableSpot(bool[] spotOccupiedArray)
     {
         for (int i = 0; i < spotOccupiedArray.Length; i++)
@@ -340,6 +366,7 @@ public class BeefSpawner : MonoBehaviour
         return -1; // No available spots
     }
 
+    // Trigger when a beef object enters the serving plate area
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Karubi") || other.CompareTag("Sirloin") || other.CompareTag("Chuck") || other.CompareTag("Ribeye") || other.CompareTag("Tongue"))
@@ -347,12 +374,13 @@ public class BeefSpawner : MonoBehaviour
             // Set serving spot occupied status
             plateOccupied = true;
 
-            // Store the reference to the beef object for further interaction.
+            // Store reference to the beef object
             plateBeef = other.gameObject;
             Debug.Log("Beef moved onto plate: " + plateBeef.name);
         }
     }
 
+    // Trigger when a beef object exits the serving plate area
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == plateBeef)
@@ -363,11 +391,13 @@ public class BeefSpawner : MonoBehaviour
         }
     }
 
+    // Get the beef object currently on the serving plate
     public GameObject GetBeefOnPlate()
     {
         return plateBeef;
     }
 
+    // Clear the serving plate if it is occupied
     public void ClearServingPlate()
     {
         if (plateOccupied)

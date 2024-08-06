@@ -1,19 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+ * Author: Curtis Low
+ * Date: 06/08/2024
+ * Description: 
+ * This class manages the state of the grill, including turning it on and off, 
+ * adjusting the heat level, and updating the visual and audio feedback. 
+ * It handles particle effects for different heat levels, updates the state 
+ * text and color, and manages audio based on the presence of beef in the grill area.
+ */using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
 
 public class Grill : MonoBehaviour
 {
-
+    // Mask used to filter the raycast layers
     public LayerMask raycastLayerMask;
 
+    // Enumeration to represent different grill states
     public enum GrillState { Off, Low, Medium, High }
+    // Current state of the grill
     private GrillState currentState = GrillState.Off;
+    // Indicates if the grill is turned on
     public bool isTurnedOn = false;
+    // Event triggered when the grill state changes
     public event Action OnGrillStateChanged;
 
+    // Particle systems for different fire effects
     public ParticleSystem tinyFireParticles;
     public ParticleSystem mediumFireParticles;
     public ParticleSystem bigFireParticles;
@@ -22,10 +34,13 @@ public class Grill : MonoBehaviour
     public GameObject bigFire;
 
     private int beefCountInTrigger = 0;
+    // Tags for beef objects
     public List<string> beefTags = new List<string> { "BeefKarubi", "BeefSirloin", "BeefRibeye" };
 
+    // Audio source for sizzling sound
     public AudioSource sizzlingAudioSource;
 
+    // Text UI element to display the grill state
     public TextMeshProUGUI grillStateText;
 
     // Define colors for each state
@@ -34,20 +49,24 @@ public class Grill : MonoBehaviour
     public Color mediumColor = Color.yellow;
     public Color highColor = Color.red;
 
+    // Audio source for button clicks
     public AudioSource buttonAudio;
 
+    // Flag to prevent handling multiple inputs at the same time , used when debugging
     private bool isHandlingInput = false;
 
+    // Initialize the grill state
     private void Start()
     {
         UpdateGrillState();
 
-        sizzlingAudioSource.Stop(); // Ensure the audio source is stopped at the start
+        sizzlingAudioSource.Stop(); // ensure the audio source is stopped at the start
 
 
     }
     private void OnEnable()
     {
+        // Initialize particle systems and fire game objects
         tinyFire.SetActive(false);
         mediumFire.SetActive(false);
         bigFire.SetActive(false);
@@ -64,6 +83,7 @@ public class Grill : MonoBehaviour
 
     public void IncreaseGrillState()
     {
+        // Increase the grill state if it's below the maximum (High)
         if (currentState < GrillState.High)
         {
             currentState++;
@@ -78,6 +98,7 @@ public class Grill : MonoBehaviour
 
     public void DecreaseGrillState()
     {
+        // Decrease the grill state if it's above the minimum (Off)
         if (currentState > GrillState.Off)
         {   
             currentState--;
@@ -95,12 +116,15 @@ public class Grill : MonoBehaviour
         // Turn the grill off if the state is Off
         if (currentState == GrillState.Off)
         {
+            // Turn off all particle effects
             isTurnedOn = false;
             DisableAllParticleSystems();
+
 
         }
         else
         {
+            // Update particle effects based on the current state
             isTurnedOn = true;
             UpdateParticleSystems();
 
@@ -113,19 +137,20 @@ public class Grill : MonoBehaviour
         // Update the grill state text
         UpdateGrillStateText();
 
-        // Invoke the OnGrillStateChanged event if there are any subscribers
+        // Trigger the OnGrillStateChanged event if there are subscribers
         OnGrillStateChanged?.Invoke();
     }
 
     private void UpdateParticleSystems()
     {
+        // Disable all particle effects before enabling the relevant ones
 
-        DisableAllParticleSystems(); // Disable all first
+        DisableAllParticleSystems(); 
         tinyFire.SetActive(true);
         mediumFire.SetActive(true);
         bigFire.SetActive(true);
 
-
+        // Play the appropriate particle system based on the current grill state
         switch (currentState)
         {
             case GrillState.Low:
@@ -148,6 +173,7 @@ public class Grill : MonoBehaviour
     }
 
 
+    // Return the current state of the grill
     public GrillState GetCurrentGrillState()
     {
         return currentState;
@@ -170,6 +196,7 @@ public class Grill : MonoBehaviour
         }
     }
 
+    // Play or stop sizzling audio based on grill state and beef presence
     private void UpdateSizzlingAudio()
     {
         if (isTurnedOn && beefCountInTrigger > 0)
@@ -215,7 +242,7 @@ public class Grill : MonoBehaviour
         {
             GameObject hitObject = hit.transform.gameObject;
             Debug.Log("Raycast hit object: " + hitObject.name);
-
+            // Check for button interactions
             if (hitObject.CompareTag("UpBtn"))
             {
                 buttonAudio.Play();
@@ -239,6 +266,7 @@ public class Grill : MonoBehaviour
         isHandlingInput = false;
     }
 
+    // Update the text and color based on the current grill state
     private void UpdateGrillStateText()
     {
         if (grillStateText == null) return;
