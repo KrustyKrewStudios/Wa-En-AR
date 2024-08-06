@@ -1,3 +1,11 @@
+/*
+ * Author: Curtis Low
+ * Date: 06/08/2024
+ * Description:
+ * This class manages the order and serving of beef items in the game.
+ * It handles setting orders, checking if the served beef matches the order,
+ * updating UI elements for orders and order status, and managing game states.
+ */
 using UnityEngine;
 using TMPro;
 using System.Collections;
@@ -5,15 +13,15 @@ using System.Collections;
 public class OrderManager : MonoBehaviour
 {
     public Transform servingPlateTransform; // Transform for the serving plate
-    public TMP_Text orderText; // Reference to the TextMeshProUGUI for displaying order status
+    public TMP_Text orderText; 
 
     private GameObject selectedBeef; // Store the selected beef
 
     private BeefType currentOrderType = BeefType.Karubi; // Default to Karubi for the first order
     private BeefBase.BeefState currentOrderState = BeefBase.BeefState.Medium; // Default to Medium for Karubi
 
-
-    public TMP_Text orderTrackerText; // Reference to the TextMeshProUGUI for displaying the order tracker (e.g., "Order 1/5")
+    // order tracker UI
+    public TMP_Text orderTrackerText;
 
     private int correctOrdersServed = 0; // Counter for the correct orders served
     private int totalOrdersToServe = 5; // Total orders to serve to win the game
@@ -25,7 +33,7 @@ public class OrderManager : MonoBehaviour
 
     public BeefSpawner beefSpawner; // Reference to the BeefSpawner script
 
-    public LayerMask raycastLayerMask; // Add a LayerMask for Raycast
+    public LayerMask raycastLayerMask; // LayerMask for Raycasting
 
     private AudioSource audioSource;
     public AudioSource wrongAudio;
@@ -34,7 +42,7 @@ public class OrderManager : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-
+        // Initialize the minigame
         StartMinigame();
     }
 
@@ -46,16 +54,19 @@ public class OrderManager : MonoBehaviour
         SetNextOrder(); // Start with the first order
     }
 
+    // Function to set the next order
     private void SetNextOrder()
     {
         if (!isEndlessMode)
         {
+            // Randomly select a new beef type and state
             currentOrderType = GetRandomBeefType();
             currentOrderState = GetRandomBeefState();
             UpdateOrderText($"{currentOrderState} {currentOrderType}");
             UpdateOrderTrackerText();
             Debug.Log($"New Order: {currentOrderState} {currentOrderType}");
         }
+        // Randomly select a new beef type and state
         else
         {
             currentOrderType = GetRandomBeefType();
@@ -63,12 +74,15 @@ public class OrderManager : MonoBehaviour
             UpdateOrderText($"{currentOrderState} {currentOrderType}");
         }
     }
+
+    // Function to get a random beef type
     private BeefType GetRandomBeefType()
     {
         BeefType[] beefTypes = { BeefType.Karubi, BeefType.Sirloin, BeefType.Chuck, BeefType.Ribeye, BeefType.Tongue };
         return beefTypes[Random.Range(0, beefTypes.Length)];
     }
 
+    // Function to get a random beef state
     private BeefBase.BeefState GetRandomBeefState()
     {
         BeefBase.BeefState[] beefStates = { BeefBase.BeefState.Rare, BeefBase.BeefState.Medium, BeefBase.BeefState.WellDone };
@@ -76,14 +90,36 @@ public class OrderManager : MonoBehaviour
     }
 
 
-    // Function to update the order text
+    // Function to update the order text on UI
     private void UpdateOrderText(string orderDescription)
     {
-        orderText.text = "Current Order: " + orderDescription;
-        Debug.Log("Current Order: " + orderDescription);
+        // Replace "WellDone" with "Well Done" if present
+        if (orderDescription.Contains("WellDone"))
+        {
+            orderDescription = orderDescription.Replace("WellDone", "Well Done");
+        }
+
+        // Capitalize each word in the order description
+        orderText.text = "Current Order: " + CapitalizeWords(orderDescription);
+        Debug.Log("Current Order: " + orderText.text);
     }
 
-    // Function to update the order tracker text
+    // Method to capitalize each word in a string
+    private string CapitalizeWords(string phrase)
+    {
+        var words = phrase.Split(' ');
+        for (int i = 0; i < words.Length; i++)
+        {
+            var word = words[i];
+            if (word.Length > 0)
+            {
+                words[i] = char.ToUpper(word[0]) + word.Substring(1).ToLower();
+            }
+        }
+        return string.Join(' ', words);
+    }
+
+    // Function to update the order tracker on the UI
     private void UpdateOrderTrackerText()
     {
         if (!isEndlessMode)
@@ -93,7 +129,7 @@ public class OrderManager : MonoBehaviour
         }
     }
 
-
+    // Function to select and move beef to the serving plate
     public void SelectBeef(GameObject beefObject)
     {
         // Move the beef to the serving plate
@@ -101,7 +137,7 @@ public class OrderManager : MonoBehaviour
         Debug.Log("Beef placed on plate: " + beefObject.name);
     }
 
-    // Function to check the order when the serve button is clicked
+    // Function to serve the beef when the serve button is clicked
     public void ServeBeef()
     {
         audioSource.Play();
@@ -118,6 +154,7 @@ public class OrderManager : MonoBehaviour
         }
     }
 
+    // Function to check if the served beef matches the current order
     private void CheckOrder(GameObject beefOnPlate)
     {
         if (beefOnPlate != null)
@@ -135,6 +172,7 @@ public class OrderManager : MonoBehaviour
                 {
                     Debug.Log("Order checked: Correct!");
                     orderText.text = "Order Served!";
+                    // Handle the correct order
                     StartCoroutine(HandleCorrectOrder(beefOnPlate));
                 }
                 else
@@ -143,6 +181,7 @@ public class OrderManager : MonoBehaviour
                     if (!typeCorrect) feedback += "Wrong Beef Type ";
                     if (!stateCorrect) feedback += "Wrong Temperature ";
                     orderText.text = feedback.Trim();
+                    // Play incorrect order feedback audio
                     wrongAudio.Play();
 
                     StartCoroutine(ResetOrderTextAfterDelay(3f, $"{currentOrderState} {currentOrderType}"));
@@ -159,12 +198,12 @@ public class OrderManager : MonoBehaviour
         }
     }
 
-
+    // Coroutine to handle the correct order by scaling down the beef and removing it
     private IEnumerator HandleCorrectOrder(GameObject beef)
     {
-        yield return new WaitForSeconds(1.5f); // Wait for 1.5 seconds before proceeding
+        yield return new WaitForSeconds(1.5f); 
 
-        float duration = 0.5f; // Duration of the scale-down animation
+        float duration = 0.5f; 
         Vector3 startScale = beef.transform.localScale;
         Vector3 endScale = Vector3.zero; // Target scale is zero to make the beef disappear
         float elapsedTime = 0;
@@ -192,6 +231,7 @@ public class OrderManager : MonoBehaviour
         } 
     }
 
+    // Function to handle the end of the game
     public void EndGame()
         {
             orderText.text = "Congratulations! You served all orders correctly!";
@@ -199,9 +239,9 @@ public class OrderManager : MonoBehaviour
             winAudio.Play();
             endScreenPanel.SetActive(true);
 
-
     }
 
+    // Function to continue in endless mode after winning the game
     public void ContinueInEndlessMode()
     {
         isEndlessMode = true;
@@ -211,11 +251,14 @@ public class OrderManager : MonoBehaviour
     }
 
 
+    // Coroutine to reset the order text after a delay
     private IEnumerator ResetOrderTextAfterDelay(float delay, string newOrder)
     {
         yield return new WaitForSeconds(delay);
         UpdateOrderText(newOrder);
     }
+
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0)) // For mouse click or tap on screen
@@ -227,6 +270,7 @@ public class OrderManager : MonoBehaviour
 
     }
 
+    // Function to handle input and raycasting
     private void HandleInput(Vector2 screenPosition)
     {
         Debug.Log("Handling input at screen position: " + screenPosition);
@@ -240,7 +284,7 @@ public class OrderManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask)) // Use the LayerMask in the Raycast
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask)) 
         {
             GameObject hitObject = hit.transform.gameObject;
             Debug.Log("Raycast hit object: " + hitObject.name);
@@ -250,7 +294,7 @@ public class OrderManager : MonoBehaviour
                 Debug.Log("clicked bell");
                 audioSource.Play();
 
-                ServeBeef();
+                ServeBeef(); // Call ServeBeef function
 
             }
 
@@ -273,7 +317,6 @@ public enum BeefType
     Chuck,
     Ribeye,
     Tongue
-    // Add more beef types as needed
 }
 
 public enum BeefState

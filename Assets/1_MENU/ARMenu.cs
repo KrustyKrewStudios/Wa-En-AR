@@ -89,7 +89,7 @@ public class ARMenu : MonoBehaviour
 
     public void OffUI()
     {
-        uiCanvas.SetActive(false);
+        uiCanvas.SetActive(false);  
         Debug.Log("off ui");
     }
 

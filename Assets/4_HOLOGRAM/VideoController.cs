@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Video;
-using UnityEngine.UI; // Make sure to include this for UI elements
+using UnityEngine.UI; 
 
 public class VideoController : MonoBehaviour
 {
