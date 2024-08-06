@@ -2287,11 +2287,11 @@ RectTransform:
   m_LocalScale: {x: 3.294482, y: 3.294482, z: 3.2944818}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 567957247}
+  m_Father: {fileID: 1908336763}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 128.00008}
+  m_AnchoredPosition: {x: 0, y: 176}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &470522724
@@ -2438,11 +2438,11 @@ RectTransform:
   m_LocalScale: {x: 0.569461, y: 3.0374491, z: 3.0374484}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 567957247}
+  m_Father: {fileID: 1908336763}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 215.99994, y: 335}
+  m_AnchoredPosition: {x: 215.99994, y: 328}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &503081204
@@ -2595,11 +2595,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2013595186}
-  m_Father: {fileID: 567957247}
+  m_Father: {fileID: 1908336763}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -254}
+  m_AnchoredPosition: {x: 0, y: -206}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &521094673
@@ -2747,11 +2747,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1604259336}
-  - {fileID: 521094672}
-  - {fileID: 503081203}
-  - {fileID: 470522723}
+  m_Children: []
   m_Father: {fileID: 1908336763}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5662,7 +5658,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Invalid
+  m_text: 'Cannot spawn a new meat while another meat is present.
 
 '
   m_isRightToLeft: 0
@@ -6281,14 +6277,14 @@ RectTransform:
   m_GameObject: {fileID: 1604259335}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5.739978, y: 8.362244, z: 6.5599}
+  m_LocalScale: {x: 5.739978, y: 7.0933566, z: 6.5599}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 567957247}
+  m_Father: {fileID: 1908336763}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0}
+  m_AnchoredPosition: {x: 0, y: 48.000004}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1604259337
@@ -13162,7 +13158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000019073486}
+  m_AnchoredPosition: {x: 0, y: 140}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1802931484
@@ -13213,8 +13209,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42
-  m_fontSizeBase: 42
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -13277,7 +13273,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   welcomeText: {fileID: 1802931484}
   stringArray:
-  - Welcome to the Mix and Match mini game!
+  - Welcome to the Mix and Match mini game! Match the different Beef Cut's with Wa-En's
+    bespoke cocktails.
   - Choose your cocktail of choice
   - Ring up the counter!
   - Welcome to the Mix and Match mini game!
@@ -13526,6 +13523,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 567957247}
+  - {fileID: 1604259336}
+  - {fileID: 521094672}
+  - {fileID: 503081203}
+  - {fileID: 470522723}
   - {fileID: 771310237}
   - {fileID: 1632672142}
   m_Father: {fileID: 7010556105441195577}
@@ -17317,10 +17318,10 @@ RectTransform:
   - {fileID: 225327492}
   - {fileID: 1882626875}
   - {fileID: 1539193589}
+  - {fileID: 1908336763}
   - {fileID: 417770187}
   - {fileID: 1406961405}
   - {fileID: 70235100}
-  - {fileID: 1908336763}
   m_Father: {fileID: 7010556103728139575}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

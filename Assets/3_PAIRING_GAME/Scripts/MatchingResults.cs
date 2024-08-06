@@ -31,31 +31,31 @@ public class MatchingResults : MonoBehaviour
     private string[] drinkItems = { "Campfire", "Martini", "Sake", "OldFashioned" };
 
     // Dictionary to store ratings for each combination
-    private Dictionary<string, int> comboRatings = new Dictionary<string, int>();
+    private Dictionary<string, (int rating, string description)> comboRatings = new Dictionary<string, (int, string)>();
 
     void Start()
     {
         // Initialize Combo ratings
-        comboRatings.Add("Chuck_Campfire", 8);
-        comboRatings.Add("Chuck_Martini", 6);
-        comboRatings.Add("Chuck_Sake", 8);
-        comboRatings.Add("Chuck_OldFashioned", 6);
-        comboRatings.Add("Sirloin_Campfire", 8);
-        comboRatings.Add("Sirloin_Martini", 9);
-        comboRatings.Add("Sirloin_Sake", 7);
-        comboRatings.Add("Sirloin_OldFashioned", 7);
-        comboRatings.Add("Ribeye_Campfire", 10);
-        comboRatings.Add("Ribeye_Martini", 7);
-        comboRatings.Add("Ribeye_Sake", 6);
-        comboRatings.Add("Ribeye_OldFashioned", 8);
-        comboRatings.Add("Karubi_Campfire", 6);
-        comboRatings.Add("Karubi_Martini", 5);
-        comboRatings.Add("Karubi_Sake", 7);
-        comboRatings.Add("Karubi_OldFashioned", 9);
-        comboRatings.Add("BeefTongue_Campfire", 7);
-        comboRatings.Add("BeefTongue_Martini", 6);
-        comboRatings.Add("BeefTongue_Sake", 8);
-        comboRatings.Add("BeefTongue_OldFashioned", 10);
+        comboRatings.Add("Chuck_Campfire", (7, "Works well but less optimal than Rib Eye or Sirloin."));
+        comboRatings.Add("Chuck_Martini", (6, "Works but doesn’t highlight the cocktail’s citrus as well."));
+        comboRatings.Add("Chuck_Sake", (8, "Pairs well with the umami depth, enhancing the Sake’s flavour."));
+        comboRatings.Add("Chuck_OldFashioned", (7, "Works well with the whiskey’s complexity, though not as ideal as Rib Eye or Sirloin."));
+        comboRatings.Add("Sirloin_Campfire", (8, "Good match as the smoky notes complement the Sirloin's balance."));
+        comboRatings.Add("Sirloin_Martini", (9, "Complements the Sirloin’s balanced flavour with its citrusy notes."));
+        comboRatings.Add("Sirloin_Sake", (7, "Good match but not as impactful as with Chuck."));
+        comboRatings.Add("Sirloin_OldFashioned", (8, "Complements the Sirloin nicely, adding a sophisticated touch to its balanced taste."));
+        comboRatings.Add("Ribeye_Campfire", (10, "Pairs well with Rib Eye due to its rich, smoky flavour enhancing the marbled texture."));
+        comboRatings.Add("Ribeye_Martini", (7, "Decent pairing but less vibrant than with Sirloin."));
+        comboRatings.Add("Ribeye_Sake", (6, "Less synergy with the Sake’s flavour profile."));
+        comboRatings.Add("Ribeye_OldFashioned", (10, "The rich, fat-washed whiskey pairs exceptionally well with the marbled Rib Eye, enhancing its flavours."));
+        comboRatings.Add("Karubi_Campfire", (6, "Less ideal due to competing flavours with the smoky profile."));
+        comboRatings.Add("Karubi_Martini", (5, "Less effective due to a mismatch with the cocktail's bright notes."));
+        comboRatings.Add("Karubi_Sake", (7, "Complements the Sake, though slightly less effective than Chuck."));
+        comboRatings.Add("Karubi_OldFashioned", (6, "Good pairing, but the fat-washed whiskey might not stand out as much."));
+        comboRatings.Add("BeefTongue_Campfire", (5, "Not the best match as its milder flavour doesn't stand out."));
+        comboRatings.Add("BeefTongue_Martini", (5, "Less effective due to a mismatch with the cocktail's bright notes."));
+        comboRatings.Add("BeefTongue_Sake", (5, "Not a great fit as its subtle flavour doesn’t pair well with the Martini."));
+        comboRatings.Add("BeefTongue_OldFashioned", (5, "Less suitable as its milder flavour doesn’t match the bold whiskey notes."));
 
         cheerEffect = GetComponent<ParticleSystem>();
     }
@@ -217,13 +217,11 @@ public class MatchingResults : MonoBehaviour
     private void RatePairing(string beef, string drink)
     {
         string comboKey = $"{beef}_{drink}";
-        if (comboRatings.TryGetValue(comboKey, out int rating))
+        if (comboRatings.TryGetValue(comboKey, out var ratingInfo))
         {
-            string ratingString = $"Rating for pairing is {rating}";
+            string ratingString = $"Rating for pairing is {ratingInfo.rating}\n{ratingInfo.description}";
             ratingText.text = ratingString;
             ratingPanel.SetActive(true);
-
-
         }
         else
         {
@@ -232,6 +230,7 @@ public class MatchingResults : MonoBehaviour
             ratingPanel.SetActive(true);
         }
     }
+
     public void ClickCounter()
     {
         clickCounter++;
