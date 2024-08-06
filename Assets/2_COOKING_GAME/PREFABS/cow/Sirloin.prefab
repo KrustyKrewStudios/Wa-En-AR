@@ -126,7 +126,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 65cf12b34a0f262488f213a56bcab1cb, type: 2}
   - {fileID: 2100000, guid: f4b1bfff7c418c0409e0366c62df47ae, type: 2}
   - {fileID: 2100000, guid: 63c07a13388ccbe478905b6b26950a9f, type: 2}
-  baseCookingTime: 10
+  baseCookingTime: 7
   progressBarUI: {fileID: 4327605306600910542}
   progressBar: {fileID: 2011569811697187560}
 --- !u!54 &5072443085199928829
