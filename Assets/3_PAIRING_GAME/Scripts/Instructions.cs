@@ -1,3 +1,9 @@
+/*
+ * Name: Bhoomika Manot
+ * Date: 23 July 2024
+ * Description: Code for resetting Instruction panels
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -1,4 +1,8 @@
-
+/*
+ * Name: Bhoomika Manot
+ * Date: 17 June 2024
+ * Description: Code for spinning the wheel
+ */
 
 using System.Collections;
 using System.Collections.Generic;
