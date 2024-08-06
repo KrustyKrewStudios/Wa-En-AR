@@ -13158,7 +13158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 140}
+  m_AnchoredPosition: {x: 0, y: 89}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1802931484
@@ -13273,7 +13273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   welcomeText: {fileID: 1802931484}
   stringArray:
-  - Welcome to the Mix and Match mini game! Match the different Beef Cut's with Wa-En's
+  - Welcome to the Mix and Match mini game! Match the different Beef Cuts with Wa-En's
     bespoke cocktails.
   - Choose your cocktail of choice
   - Ring up the counter!
