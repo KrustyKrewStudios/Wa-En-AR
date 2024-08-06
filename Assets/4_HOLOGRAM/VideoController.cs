@@ -1,41 +1,47 @@
 using UnityEngine;
 using UnityEngine.Video;
+using UnityEngine.UI; 
 
 public class VideoController : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
 
+    private bool isPrepared = false;
+
     void Start()
     {
         // Set up the video path and prepare the video player
-        string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, "side-eye_1.mp4");
+        string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, "video.mp4");
         videoPlayer.url = videoPath;
+
+        Debug.Log($"Video path set to: {videoPath}");
+
         videoPlayer.prepareCompleted += OnVideoPrepared;
 
         // Prepare the video player but don't start playing yet
+        Debug.Log("Preparing video player...");
         videoPlayer.Prepare();
-    }
 
-    public void PlayVideo()
-    {
-        // Lock screen orientation to landscape when starting the video
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
 
-        // Start playing the video
-        if (videoPlayer.isPrepared)
-        {
-            videoPlayer.Play();
-        }
-        else
-        {
-            // If the video is not yet prepared, start playing after preparation is complete
-            videoPlayer.prepareCompleted += OnVideoPrepared;
-        }
     }
 
     void OnVideoPrepared(VideoPlayer vp)
     {
-        // Start playing the video
-        vp.Play();
+        isPrepared = true;
+        Debug.Log("Video prepared. Ready to play.");
+    }
+
+    public void PlayVideo()
+    {
+        // Start playing the video only if it is prepared
+        if (isPrepared)
+        {
+            Debug.Log("Playing video...");
+            videoPlayer.Play();
+        }
+        else
+        {
+            Debug.LogWarning("Video is not yet prepared.");
+        }
     }
 }

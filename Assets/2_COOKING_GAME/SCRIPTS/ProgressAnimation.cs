@@ -1,3 +1,8 @@
+/*
+ * Author: Curtis Low
+ * Date: 06/08/2024
+ * Description: controls animation for progress bar in how to play panel
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -1,16 +1,30 @@
+/*
+ * Author: Curtis Low
+ * Date: 06/08/2024
+ * Description:
+ * This class provides functionality for outlining selected objects in the scene.
+ * It maintains a singleton instance and manages the application and removal of 
+ * outline materials to highlight selected objects. It handles restoring original
+ * materials when selection changes.
+ */
 using UnityEngine;
 
 public class OutlineSelection : MonoBehaviour
 {
+    // Singleton instance of OutlineSelection
     public static OutlineSelection Instance { get; private set; }
 
-    public Material outlineMaterial; // Drag your outline material here in the inspector
+    // Material used for outlining selected objects
+    public Material outlineMaterial;
 
+    // Reference to the renderer of the previously selected object  
     private Renderer previousSelectionRenderer;
+    // Array of materials of the previously selected object
     private Material[] previousMaterials;
 
     private void Awake()
     {
+        // Implement singleton pattern to ensure only one instance of OutlineSelection exists
         if (Instance == null)
         {
             Instance = this;
@@ -22,6 +36,7 @@ public class OutlineSelection : MonoBehaviour
         }
     }
 
+    // Apply outline to the specified beef object
     public void OutlineBeef(GameObject beef)
     {
         // Remove outline from the previous selection, if any
@@ -51,6 +66,7 @@ public class OutlineSelection : MonoBehaviour
         }
     }
 
+    // Remove outline from the currently selected object
     public void Unselect()
     {
         // Remove outline from the previously selected object
@@ -62,6 +78,7 @@ public class OutlineSelection : MonoBehaviour
         }
     }
 
+    // Restore the original materials of the specified renderer
     private void RestoreMaterials(Renderer renderer)
     {
         // Restore the original materials
