@@ -525,6 +525,31 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1587085323}
+    - target: {fileID: 5607447794324225765, guid: 8650208fbd2643a4cb4a49798212fc00,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609466966725244241, guid: 8650208fbd2643a4cb4a49798212fc00,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.275
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609466966725244241, guid: 8650208fbd2643a4cb4a49798212fc00,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.275
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609466966725244241, guid: 8650208fbd2643a4cb4a49798212fc00,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.25379765
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609466966725244241, guid: 8650208fbd2643a4cb4a49798212fc00,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.092
+      objectReference: {fileID: 0}
     - target: {fileID: 5638065726151523031, guid: 8650208fbd2643a4cb4a49798212fc00,
         type: 3}
       propertyPath: m_text
@@ -541,7 +566,22 @@ PrefabInstance:
       propertyPath: wrongAudio
       value: 
       objectReference: {fileID: 302170053}
+    - target: {fileID: 5698920827025105741, guid: 8650208fbd2643a4cb4a49798212fc00,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 5698920827025105741, guid: 8650208fbd2643a4cb4a49798212fc00,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 7235092908787803673, guid: 8650208fbd2643a4cb4a49798212fc00,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7352946472920610852, guid: 8650208fbd2643a4cb4a49798212fc00,
         type: 3}
       propertyPath: m_IsActive
       value: 1
