@@ -15,6 +15,7 @@ public class MatchingResults : MonoBehaviour
     //Declarations
     public TMP_Text ratingText;
     public GameObject ratingPanel;
+    public GameObject invalidPanel;
     public ParticleSystem cheerEffect;
     public GameObject cheerFX;
     public AudioSource cheerAudio;
@@ -42,18 +43,18 @@ public class MatchingResults : MonoBehaviour
     void Start()
     {
         //Initialize Combo ratings
-        comboRatings.Add("Chuck_Campfire", (7, "Works well but less optimal than Rib Eye or Sirloin."));
+        comboRatings.Add("Chuck_Campfire", (7, "Works well but less optimal than Ribeye or Sirloin."));
         comboRatings.Add("Chuck_Martini", (6, "Works but doesn’t highlight the cocktail’s citrus as well."));
         comboRatings.Add("Chuck_Sake", (8, "Pairs well with the umami depth, enhancing the Sake’s flavour."));
-        comboRatings.Add("Chuck_OldFashioned", (7, "Works well with the whiskey’s complexity, though not as ideal as Rib Eye or Sirloin."));
+        comboRatings.Add("Chuck_OldFashioned", (7, "Works well with the whiskey’s complexity, though not as ideal as Ribeye or Sirloin."));
         comboRatings.Add("Sirloin_Campfire", (8, "Good match as the smoky notes complement the Sirloin's balance."));
         comboRatings.Add("Sirloin_Martini", (9, "Complements the Sirloin’s balanced flavour with its citrusy notes."));
         comboRatings.Add("Sirloin_Sake", (7, "Good match but not as impactful as with Chuck."));
         comboRatings.Add("Sirloin_OldFashioned", (8, "Complements the Sirloin nicely, adding a sophisticated touch to its balanced taste."));
-        comboRatings.Add("Ribeye_Campfire", (10, "Pairs well with Rib Eye due to its rich, smoky flavour enhancing the marbled texture."));
+        comboRatings.Add("Ribeye_Campfire", (10, "Pairs well with Ribeye due to its rich, smoky flavour enhancing the marbled texture."));
         comboRatings.Add("Ribeye_Martini", (7, "Decent pairing but less vibrant than with Sirloin."));
         comboRatings.Add("Ribeye_Sake", (6, "Less synergy with the Sake’s flavour profile."));
-        comboRatings.Add("Ribeye_OldFashioned", (10, "The rich, fat-washed whiskey pairs exceptionally well with the marbled Rib Eye, enhancing its flavours."));
+        comboRatings.Add("Ribeye_OldFashioned", (10, "The rich, fat-washed whiskey pairs exceptionally well with the marbled Ribeye, enhancing its flavours."));
         comboRatings.Add("Karubi_Campfire", (6, "Less ideal due to competing flavours with the smoky profile."));
         comboRatings.Add("Karubi_Martini", (5, "Less effective due to a mismatch with the cocktail's bright notes."));
         comboRatings.Add("Karubi_Sake", (7, "Complements the Sake, though slightly less effective than Chuck."));
@@ -133,7 +134,7 @@ public class MatchingResults : MonoBehaviour
     {
         string invalidMessage = "Cannot spawn a new drink while another drink is present";
         ratingText.text = invalidMessage;
-        ratingPanel.SetActive(true);
+        invalidPanel.SetActive(true);
     }
 
     //Detect items via OnTrigger & Tags

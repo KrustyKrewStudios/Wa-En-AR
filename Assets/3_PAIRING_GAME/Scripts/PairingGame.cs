@@ -144,7 +144,7 @@ public class PairingGame : MonoBehaviour
             currentSpeed = 1000f;
 
             //Set random time for spinning
-            spinTimer = Random.Range(2.5f, 5f);
+            spinTimer = Random.Range(3.5f, 5f);
             Debug.Log(spinTimer);
 
             //Reset
